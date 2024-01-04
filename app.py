@@ -9,12 +9,6 @@ app = Flask(__name__)
 
 app.static_folder = 'static'
 
-
-#-------NUKE PROTOCOL------------------
-    # SET FOREIGN_KEY_CHECKS = 0;
-    # DROP TABLES Restaurants, FoodCategories, MenuItems, RestaurantSalesInvoices;
-    # SOURCE ../../../Users/kpar1/VS Project Folders/CS361/cs361DB/database/DDL.sql;
-
 #------------------------------------ROUTE FOR HOMEPAGE----------------------------------------------------------------------
 
 @app.route('/')
