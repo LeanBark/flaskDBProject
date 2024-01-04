@@ -1,0 +1,136 @@
+body {
+    background-color: rgb(135, 173, 255);
+    font-family: Arial, Helvetica, sans-serif;
+    display: inline-block;
+    justify-content: center;
+    align-items: center;
+    margin: auto 10%;
+    width: 80%;
+    letter-spacing: 1px;
+    text-align:center;
+    vertical-align: middle;
+}
+ /* styling for headings */
+h1, h2{
+    text-align: center;
+    padding: 10px;
+    color:darkred;
+}
+
+
+/* styling for table elements */
+table {
+    align-content: center;
+    border-style: solid;
+    border-color: black;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    vertical-align: auto;
+}
+    
+td {
+    size: 40px;
+    padding: 8px;
+    
+    text-align: center;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    letter-spacing: 1px;
+}
+
+td,tr {
+    border: solid #a1a0a0;
+    color: rgb(31, 63, 63);
+    letter-spacing: 1px;
+    background: rgb(255, 255, 255);
+}
+
+th {
+    padding: 12px;
+    text-align: center;
+    background-color: #05583a;
+    color: white;
+    border: solid #a1a0a0;
+}
+
+ /* form styling */
+
+form {
+    /* vertical-align: middle; */
+    color: rgb(28, 32, 28);
+    padding-top: 5px;
+    padding-bottom: 5px;
+    position: relative;
+    /* margin-left: auto;
+    margin-right: auto; */
+    size: 30px;
+}
+
+/* styling for controlling size of different types of input elements according to content */
+
+button:hover{
+    background-color: rgb(247, 247, 247);
+}
+
+
+input, select {
+    padding-bottom: 4px;
+    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    text-align: center;
+}
+
+ /* styling for repeating body elements */
+a {
+    display: inline-block;
+    font-family:Arial, Helvetica, sans-serif;
+    letter-spacing: 1px;
+    text-align: center;
+    margin: 10px;
+}
+
+p {
+    position: relative;
+    margin: 10px;
+    padding: 20px;
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+    color:rgb(16, 75, 3);
+}
+
+fieldset{
+    margin-left: auto;
+    margin-right:auto;
+    width: 80%;
+    border: solid black;
+    vertical-align: auto;
+    color:darkred;
+}
+
+header {
+    padding: 20px;
+    top: 50px;
+    margin: 25px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-align: center;
+}
+
+button {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Ensures transitions between document display formats of restaurant_invoices.j2 and restaurant_menu.j2 are smooth */
+#add-menu-item{
+    display: none;   
+}
+
+#add-invoice{
+    display: none;
+}
+
+#edit-invoice{
+    display: none;
+}
+
+#edit-menu-item{
+    display: none;
+}
