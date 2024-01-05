@@ -33,7 +33,7 @@ def execute_query(db_connection=None, query=None, query_params=()):
 
 if __name__ == "__main__":
     # sample testing for connection
-    print("Executing sample query to db using credentials from db_credentials")
+    print("Executing sample query to db using credentials from db_credentials or.env")
     query = "SELECT * FROM Restaurants"
     results = execute_query(db, query);
     print("Printing results of %s % query")
