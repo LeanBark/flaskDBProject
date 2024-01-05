@@ -8,6 +8,7 @@ The locally-implemented mariaDB database stores information in terms of:
 - Each restaurant's menu item information (for all items listed in their respective menus)
 - Sales invoices for each restaurant in terms of the item from their menu that was sold
 
+This implementation was designed for use as an accessible back-end user interface for database access/maintenance
 
 # Environment Setup
 
@@ -35,10 +36,10 @@ In MariaDB folder:
 This project was designed for locally hosting the database and UI instead of hosting on a remote server. Connection to either type of server will require adding a .env file that defines the user-specific values for authorized access to the database:
 
 Example for .env format:
-    <database_nameHOST> = <your_hostname>
-    <database_nameUSER> = <your_username>
-    <database_namePW> = <your_databsse_password>
-    <database_name> = <database_name>
+ - "database_nameHOST" = your_hostname
+ - "database_nameUSER" = your_username
+ - "database_namePW" = your_database_password
+ - "database_name" = database_name
 
 Ensure the .env definition names match those requested within the db_connector.py
 
@@ -48,11 +49,11 @@ In IDE terminal:
 - PORT value should be defined in app.py
 
 
-# Remotely Accessing the app using a remote host server
+# Remotely Accessing the App using a Remote Host Server
 While the a local database can still be implemented following the instructions above, the hostname value in the .env file will need to be altered to reflect the remote server you wish to access.
 
 This may also affect the website address that will display the UI
- - This most likely will be "http://{hostserver's IP address}:{PORT value defined in app.py}"/ 
+ - This most likely will be "http://{hostserver's IP address}:{PORT value defined in app.py}/" 
 
 
 # Populating Database with Additional Sample Data
