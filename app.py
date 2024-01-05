@@ -33,6 +33,7 @@ def restaurants():
             db.execute_query(db_connection=db_connection, query=query, query_params=(name, address, category))
             return redirect("/restaurants")
     
+    # if user wishes to view the information of the selected restaurant
     if request.method == "GET":
         query = """SELECT Restaurants.restaurantID AS Id, Restaurants.name AS Name, Restaurants.address AS Address, FoodCategories.name AS Category 
         FROM Restaurants INNER JOIN FoodCategories ON Restaurants.food_categoryID = FoodCategories.food_categoryID;"""
@@ -67,7 +68,9 @@ def edit_restaurant(restaurantID):
         categories = db.execute_query(db_connection=db_connection, query=category_query)
         selected_categories = categories.fetchall()
         return render_template("edit_restaurants.j2", restaurants=results, food_category=selected_categories)
-    
+
+#-------------------------------ROUTE FOR DELETING A RESTAURANT FROM RESTAURANTS TABLE-------------------------------------
+
 @app.route('/delete-restaurant/<int:restaurantID>')
 def delete_restaurant(restaurantID):
     delete_query = "DELETE FROM Restaurants WHERE restaurantID = %s" % (restaurantID)
@@ -261,14 +264,19 @@ def display_invoices(restaurantID):
             JOIN MenuItems ON RestaurantSalesInvoices.menu_itemID = MenuItems.menu_itemID
             WHERE RestaurantSalesInvoices.restaurantID = %s;""" % (restaurantID)
             invoice_list = db.execute_query(db_connection=db_connection, query=invoices_query)
+            invoices = invoice_list.fetchall()
+            menu_item_query = "SELECT * FROM MenuItems WHERE MenuItems.restaurantID = %s;" % (restaurantID)
+            menu_list = db.execute_query(db_connection=db_connection, query=menu_item_query)
+            menu_items = menu_list.fetchall()
+            
+            # if there are no invoices associated with the selected restaurant
             if invoice_list.rowcount == 0:
-                return render_template("invoices_not_found.j2")
+                restaurant_query = "SELECT * FROM Restaurants WHERE restaurantID = %s" % (restaurantID)
+                restaurant_result = db.execute_query(db_connection=db_connection, query=restaurant_query)
+                selected_restaurant = restaurant_result.fetchall()
+                return render_template("invoices_not_found.j2", selected_restaurant=selected_restaurant, menu=menu_items)
             
             else:
-                invoices = invoice_list.fetchall()
-                menu_item_query = "SELECT * FROM MenuItems WHERE MenuItems.restaurantID = %s;" % (restaurantID)
-                menu_list = db.execute_query(db_connection=db_connection, query=menu_item_query)
-                menu_items = menu_list.fetchall()
                 return render_template("restaurant_invoices.j2", invoices=invoices, menu=menu_items)
         
         # if user decides to add a new invoice to the table of invoices for the selected restaurant
@@ -302,17 +310,12 @@ def display_invoices(restaurantID):
         JOIN MenuItems ON RestaurantSalesInvoices.menu_itemID = MenuItems.menu_itemID
         WHERE RestaurantSalesInvoices.restaurantID = %s;""" % (restaurantID)
         invoice_list = db.execute_query(db_connection=db_connection, query=invoices_query)
+        invoices = invoice_list.fetchall()
         
-        # if restaurant has no existing invoices
-        if invoice_list.rowcount == 0:
-                return render_template("invoices_not_found.j2")
-            
-        else:
-            invoices = invoice_list.fetchall()
-            menu_item_query = "SELECT * FROM MenuItems WHERE MenuItems.restaurantID = %s;" % (restaurantID)
-            menu_list = db.execute_query(db_connection=db_connection, query=menu_item_query)
-            menu_items = menu_list.fetchall()
-            return render_template("restaurant_invoices.j2", invoices=invoices, menu=menu_items)
+        menu_item_query = "SELECT * FROM MenuItems WHERE MenuItems.restaurantID = %s;" % (restaurantID)
+        menu_list = db.execute_query(db_connection=db_connection, query=menu_item_query)
+        menu_items = menu_list.fetchall()
+        return render_template("restaurant_invoices.j2", invoices=invoices, menu=menu_items)
 
 #-------------------------------ROUTE FOR UPDATING INVOICES BY RESTAURANT--------------------------------------------------
     

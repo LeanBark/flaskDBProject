@@ -42,10 +42,6 @@
         displayController('edit');
     }
 
-    function showEverything() {
-        displayController('everything');
-    }
-
     function showInvoices() {
         displayController('');
     }
@@ -91,15 +87,15 @@
                     <legend class="float-none w-auto">Create A New Invoice</legend>
                     <p>Select Sold Item from <strong>{{invoices[0].Restaurant}}</strong> Menu</p>
                     <div class="input-group">        
-                            <select class="form-select" name="menu-item-value" id="menu-item-value">
-                                <option value="">Select Menu Item</option>
-                                {% for item in menu %}
-                                <option value="{{item.menu_itemID}}">{{item.name}}</option>
-                                {% endfor %}
-                            </select>
+                        <select class="form-select" name="menu-item-value" id="menu-item-value">
+                            <option value="">Select Menu Item</option>
+                            {% for item in menu %}
+                            <option value="{{item.menu_itemID}}">{{item.name}}</option>
+                            {% endfor %}
+                        </select>
 
-                            <button class="btn btn-success" type="submit" name="Add Invoice" value="Add Invoice" id="Add Invoice">Add Invoice</button>
-                            <input class="btn btn-danger" type="button" value="Cancel" onclick="showInvoices()">
+                        <button class="btn btn-success" type="submit" name="Add Invoice" value="Add Invoice" id="Add Invoice">Add Invoice</button>
+                        <input class="btn btn-danger" type="button" value="Cancel" onclick="showInvoices()">
                     </div>
                 </fieldset>
             </form>
