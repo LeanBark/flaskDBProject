@@ -51,6 +51,7 @@ th {
     background-color: #05583a;
     color: white;
     border: solid #a1a0a0;
+
 }
 
  /* form styling */
@@ -106,11 +107,11 @@ fieldset{
 }
 
 header {
-    padding: 20px;
+    padding: 25px;
     top: 50px;
     margin: 25px;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    text-align: center;
+    /* text-align: center; */
 }
 
 button {

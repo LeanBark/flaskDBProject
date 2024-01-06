@@ -86,5 +86,5 @@ if __name__ == "__main__":
 
     finish_time = datetime.now()
     duration = finish_time - now_time
-    seconds, microseconds = divmod(duration.microseconds, 1000000)
+    seconds, microseconds = divmod(duration.seconds, 1000000)
     print(f'The function took {seconds} seconds and {microseconds} ms to run.')

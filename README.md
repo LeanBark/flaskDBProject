@@ -64,7 +64,7 @@ To populate the database with the additional information, execute the "data_coll
 
 # Citations
 
-Citation for the UI templating/design/structure and database connection procedures:
+Citation for the UI templating design, app.py routing structure, and MariaDB database connection procedures:
 - Date: 12/20/2023
 - Adapted form the OSU CS340 Flask Starter App
 - Source URL: https://github.com/osu-cs340-ecampus/flask-starter-app/tree/master?tab=readme-ov-file
@@ -75,7 +75,7 @@ Citation for Icons:
 - Source URL for Edit Icons: https://www.svgrepo.com/svg/521620/edit
 - Source Url for Delete Icons: https://www.svgrepo.com/svg/502614/delete
 
-Citation for Bootstrap:
+Citation for Bootstrap and its implementation based on the provided documentation:
 - Date: 1/4/2024
 - Bootstrap utility for layout design/styling obtained from https://getbootstrap.com
 - Source URL: https://getbootstrap.com/docs/5.3/getting-started/introduction/
