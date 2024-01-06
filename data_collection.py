@@ -6,7 +6,7 @@ db_connection = db.connect_to_database()
 
 # function can be called in tandem with json file to add increased sample data to database
 def collect_data():
-    with open("add_menus.json", "r") as in_file:
+    with open("sample_data.json", "r") as in_file:
         restaurants_data = json.load(in_file)
 
     restaurant_menus = {}
@@ -16,7 +16,7 @@ def collect_data():
     for restaurant in restaurants_data.keys():
         # each restaurant now has a "menu" key with a list of arrays as its value, where each array contains individual item information  
         restaurant_menus[restaurant] = {"menu":[[restaurants_data[restaurant]["menu_item"][i], restaurants_data[restaurant]["calories"][i],
-                                                restaurants_data[restaurant]["food_category"][i]] for i in range(entry_size)],
+                                                restaurants_data[restaurant]["food_category"][i], restaurants_data[restaurant]["unit_price"][i]] for i in range(entry_size)],
                                                 "address": restaurants_data[restaurant]["address"],
                                                 "restaurant_category": restaurants_data[restaurant]["restaurant_category"]}
     
@@ -63,14 +63,15 @@ def collect_data():
             item_name = restaurant_menus[name]["menu"][i][0]
             calorie_amt = restaurant_menus[name]["menu"][i][1]
             item_category = restaurant_menus[name]["menu"][i][2]
+            item_price = restaurant_menus[name]["menu"][i][3]
             
             categories_query = 'SELECT food_categoryID FROM FoodCategories WHERE name="%s";' % (item_category)
             category_name = db.execute_query(db_connection=db_connection, query=categories_query)
             selected_category = category_name.fetchall()
 
             category_id = selected_category[0]["food_categoryID"]
-            insert_data_query = "INSERT INTO MenuItems(name, calories, food_categoryID, restaurantID) VALUES (%s,%s, %s, %s);"
-            db.execute_query(db_connection=db_connection, query=insert_data_query, query_params=(item_name,calorie_amt, category_id, id_value))
+            insert_data_query = "INSERT INTO MenuItems(name, calories, unit_price, food_categoryID, restaurantID) VALUES (%s, %s, %s, %s, %s);"
+            db.execute_query(db_connection=db_connection, query=insert_data_query, query_params=(item_name, calorie_amt, item_price, category_id, id_value))
 
 if __name__ == "__main__":
     # testing and timing

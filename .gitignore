@@ -3,3 +3,4 @@ db_credentials.py
 clear_protocol.txt
 db_connector.cpython-311.pyc
 /.vscode
+list_generator.py

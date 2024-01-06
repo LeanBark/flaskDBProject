@@ -40,17 +40,22 @@
                     <input type="hidden" id="restaurant" name="restaurant" value="{{menu_list[0].restaurantID}}" required>
                     <div class="row">
 
-                        <div class="col-5">
+                        <div class="col-4">
                             <label for="menu-item-name">Item Name:</label>
-                            <input class="form-control" type="text" id="menu-item-name" name="menu-item-name" placeholder="{{menu_list[0].Item}}" required>
+                            <input class="form-control" type="text" id="menu-item-name" name="menu-item-name" value="{{menu_list[0].Item}}" required>
                         </div>
 
                         <div class="col-3">
                             <label for="menu-item-calories">Calorie Amount:</label>
-                            <input class="form-control" type="number" id="menu-item-calories" name="menu-item-calories" placeholder="{{menu_list[0].Calories}}" required>
+                            <input class="form-control" type="number" id="menu-item-calories" name="menu-item-calories" value="{{menu_list[0].Calories}}" required>
                         </div>
 
-                        <div class="col-4">
+                        <div class="col-2">
+                            <label for="menu-item-price">Price Value:</label>
+                            <input class="form-control" name="menu-item-price" id="menu-item-price" type="number" min="1" max="90" step="0.01" value="{{menu_list[0].Price}}" required>
+                        </div>
+
+                        <div class="col-3">
                             <label for="menu-item-food-category">Food Category:</label>
                             <select class="form-select" id="menu-item-food-category" name="menu-item-food-category" required>
                                 {% for category in food_category %}

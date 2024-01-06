@@ -25,7 +25,7 @@
             1647
         ],
         "food_category": [
-            "Dessert",
+            "American",
             "Seafood",
             "Pizza",
             "Italian",
@@ -159,13 +159,13 @@
         "menu_item": [
             "Sushi Roll",
             "Mushroom Risotto",
-            "Pho Bo",
-            "Phapda",
+            "Pho Bo Mein Soup",
+            "Phapda Salad",
             "Caesar Wrap",
             "Lobster Bisque",
             "Chicken Quesadilla",
             "Croissants",
-            "Burger",
+            "Chilly Burger",
             "Beef Stir-Fry"
         ],
         "calories": [
@@ -217,7 +217,7 @@
             "Chicken Satay",
             "Spanakopita",
             "Hamburger",
-            "Gumbo",
+            "Louisiana Gumbo",
             "Miso Soup"
         ],
         "calories": [
@@ -267,10 +267,10 @@
             "Miso Salmon",
             "Tiramisu",
             "Chicken Pad See Ew",
-            "Biryani",
+            "Biryani Delight",
             "Tacos al Pastor",
             "Butter Chicken",
-            "Tacos"
+            "Flaming Tacos"
         ],
         "calories": [
             488,
@@ -314,7 +314,7 @@
     "DAngelo Grilled Sandwiches": {
         "menu_item": [
             "Fettuccine Alfredo",
-            "Ramen",
+            "Miso Ramen",
             "Pad Thai",
             "Risotto",
             "Chicken Tikka Masala",
@@ -322,7 +322,7 @@
             "Cinnamon Rolls",
             "Goulash",
             "Tandoori Chicken",
-            "Pho Ga"
+            "Pho Ga Medley"
         ],
         "calories": [
             1453,
@@ -368,12 +368,12 @@
             "Gyudon",
             "Pesto Pasta",
             "Philly Cheesesteak",
-            "Lasagna",
+            "SpicyLasagna",
             "Ratatouille",
             "Caesar Salad",
             "Crispy Pork Belly",
             "Beef Empanadas",
-            "Baklava",
+            "Baklava Burrito",
             "Samosas"
         ],
         "calories": [
@@ -418,7 +418,7 @@
     "Brixx Wood Fired Pizza": {
         "menu_item": [
             "Shrimp and Grits",
-            "Sushi",
+            "Tuna Sashimi",
             "Key Lime Pie",
             "Caprese Salad",
             "Smoked Rain Duckbill",
@@ -476,7 +476,7 @@
             "Shrimp Scampi",
             "Chicken Caesar Salad",
             "Crispy Fried Chicken",
-            "Steak",
+            "Steak Supreme",
             "Chicken Enchiladas",
             "Chocolate Chip Cookies"
         ],
@@ -525,8 +525,8 @@
             "Vegetable Curry",
             "Sushi Burrito",
             "Ceviche",
-            "",
-            "Cr\u00c3\u00a8me Br\u00c3\u00bbl\u00c3\u00a9e",
+            "FudgeCano",
+            "Cremme Brullee",
             "Lomo Saltado",
             "Volcanic Coriander & Lemon Snacks",
             "Uqince Cake",
@@ -888,7 +888,7 @@
             "Sugar - Crumb",
             "Tofu - Firm",
             "Beer - Maudite",
-            "Radish",
+            "Spiced Radish Wrap",
             "Appetizer - Mini Egg Roll, Shrimp",
             "Chicken - Whole",
             "Ginger - Pickled",
@@ -2973,7 +2973,7 @@
             "Ecolab Crystal Fusion",
             "Miso - Soy Bean Paste",
             "Wine - Placido Pinot Grigo",
-            "Garbage Bags - Black",
+            "Garlic Bread",
             "Lentils - Red, Dry"
         ],
         "calories": [

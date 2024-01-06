@@ -93,17 +93,21 @@
                     <legend class="float-none w-auto">Enter A New Menu Item</legend>
                     <input type="hidden" name="restaurant" id="restaurant" value="{{menu_list[0].restaurantID}}" >
                     <div class="row">
-                        <div class="col-6">
+                        <div class="col-4">
                             <label for="menu-item-name">Menu Item Name:</label>
-                            <input class="form-control" type="text" name="menu-item-name" id="menu-item-name" placeholder="Item Name">
+                            <input class="form-control" type="text" name="menu-item-name" id="menu-item-name" placeholder="Item Name" required>
                         </div>
                         <div class="col-3">
                             <label for="menu-item-calories">Calorie Amount:</label>
-                            <input class="form-control" type="number" name="menu-item-calories" id="menu-item-calories" placeholder="Calorie Value">
+                            <input class="form-control" type="number" name="menu-item-calories" id="menu-item-calories" placeholder="Calorie Value" required>
+                        </div>
+                        <div class="col-2">
+                            <label for="menu-item-price">Price:</label>
+                            <input class="form-control" name="menu-item-price" id="menu-item-price" type="number" min="1" max="90" step="0.01" placeholder="Price Value" required>
                         </div>
                         <div class="col-3">
                             <label for="menu-food-category">Food Category:</label>
-                            <select class="form-select" name="menu-item-food-category" id="menu-item-food-category">
+                            <select class="form-select" name="menu-item-food-category" id="menu-item-food-category" required>
                                 <option value="">Select a Food Category</option>
                                 {% for category in food_category %}
                                 <option value="{{category.food_categoryID}}">{{category.name}}</option>
@@ -130,7 +134,7 @@
                     <legend class="float-none w-auto">Edit Restaurant Menu Information</legend>
                     <input type="hidden" id="restaurant" name="restaurant" value="{{menu_list[0].restaurantID}}" required>
                     <div class="row">
-                        <div class="col-5">
+                        <div class="col-4">
                             <label for="menu-item-name">Item Name:</label>
                             <input class="form-control" type="text" id="menu-item-name" name="menu-item-name" value="{{menu_list[0].Item}}" required>
                         </div>
@@ -138,7 +142,11 @@
                             <label for="menu-item-calories">Calorie Amount:</label>
                             <input class="form-control" type="number" id="menu-item-calories" name="menu-item-calories" value="{{menu_list[0].calories}}" required>
                         </div>
-                        <div class="col-4">
+                        <div class="col-2">
+                            <label for="menu-item-price">Price:</label>
+                            <input class="form-control" name="menu-item-price" id="menu-item-price" type="number" min="1" max="90" step="0.01" value="{{menu_list[0].Price}}" required>
+                        </div>
+                        <div class="col-3">
                             <label for="menu-item-food-category">Food Category:</label>
                             <select class="form-select" id="menu-item-food-category" name="menu-item-food-category" required>
                                 {% for category in food_category %}

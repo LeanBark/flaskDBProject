@@ -98,7 +98,7 @@ def display_menu_items(restaurantID):
         
         # if user requests access to a specific restaurant's menu in database
         if request.form.get("View Restaurant Menu"):
-            menu_query = """SELECT MenuItems.restaurantID, MenuItems.menu_itemID, MenuItems.name AS Item, MenuItems.calories AS Calories, FoodCategories.name AS Category
+            menu_query = """SELECT MenuItems.restaurantID, MenuItems.menu_itemID, MenuItems.name AS Item, MenuItems.calories AS Calories, MenuItems.unit_price AS Price, FoodCategories.name AS Category
             FROM MenuItems JOIN Restaurants ON MenuItems.restaurantID = Restaurants.restaurantID
             LEFT JOIN FoodCategories ON MenuItems.food_categoryID = FoodCategories.food_categoryID
             WHERE Restaurants.restaurantID = %s;""" % (restaurantID)
@@ -112,17 +112,23 @@ def display_menu_items(restaurantID):
             category_query = "SELECT * FROM FoodCategories"
             categories = db.execute_query(db_connection=db_connection, query=category_query)
             selected_categories = categories.fetchall()
-            return render_template("restaurant_menu.j2", menu_list=all_menu_items, restaurant_name=restaurant_name, food_category=selected_categories)
+                        # if there are no invoices associated with the selected restaurant
+            if matching_items.rowcount == 0:
+                return render_template("menu_not_found.j2", selected_restaurant=restaurant_name, food_category=selected_categories)
+
+            else:
+                return render_template("restaurant_menu.j2", menu_list=all_menu_items, restaurant_name=restaurant_name, food_category=selected_categories)
         
         # if a user wants to add a new item to the selected restaurant's menu in the databse
         elif request.form.get("Add Menu Item"):
             item_name = request.form["menu-item-name"]
             calories = request.form["menu-item-calories"]
+            item_cost = request.form["menu-item-price"]
             category = request.form["menu-item-food-category"]
-            query = "INSERT INTO MenuItems (name, calories, food_categoryID, restaurantID) VALUES (%s, %s, %s, %s);"
-            db.execute_query(db_connection=db_connection, query=query, query_params=(item_name, calories, category, restaurantID))
+            query = "INSERT INTO MenuItems (name, calories, unit_price, food_categoryID, restaurantID) VALUES (%s, %s, %s, %s, %s);"
+            db.execute_query(db_connection=db_connection, query=query, query_params=(item_name, calories, item_cost, category, restaurantID))
             
-            menu_query = """SELECT MenuItems.restaurantID, MenuItems.menu_itemID, MenuItems.name AS Item, MenuItems.calories AS Calories, FoodCategories.name AS Category
+            menu_query = """SELECT MenuItems.restaurantID, MenuItems.menu_itemID, MenuItems.name AS Item, MenuItems.calories AS Calories, MenuItems.unit_price AS Price, FoodCategories.name AS Category
             FROM MenuItems JOIN Restaurants ON MenuItems.restaurantID = Restaurants.restaurantID
             LEFT JOIN FoodCategories ON MenuItems.food_categoryID = FoodCategories.food_categoryID
             WHERE Restaurants.restaurantID = %s;""" % (restaurantID)
@@ -142,7 +148,7 @@ def display_menu_items(restaurantID):
     
     # if user wishes to revisit the table of current menu items specific to the restaurant
     else:
-        menu_query = """SELECT MenuItems.restaurantID, MenuItems.menu_itemID, MenuItems.name AS Item, MenuItems.calories AS Calories, FoodCategories.name AS Category
+        menu_query = """SELECT MenuItems.restaurantID, MenuItems.menu_itemID, MenuItems.name AS Item, MenuItems.calories AS Calories, MenuItems.unit_price AS Price, FoodCategories.name AS Category
         FROM MenuItems JOIN Restaurants ON MenuItems.restaurantID = Restaurants.restaurantID
         LEFT JOIN FoodCategories ON MenuItems.food_categoryID = FoodCategories.food_categoryID
         WHERE Restaurants.restaurantID = %s;""" % (restaurantID)
@@ -156,7 +162,10 @@ def display_menu_items(restaurantID):
         category_query = "SELECT * FROM FoodCategories"
         categories = db.execute_query(db_connection=db_connection, query=category_query)
         selected_categories = categories.fetchall()
-        return render_template("restaurant_menu.j2", menu_list=all_menu_items, restaurant_name=restaurant_name, food_category=selected_categories)
+        if matching_items.rowcount == 0:
+                return render_template("menu_not_found.j2", selected_restaurant=restaurant_name, food_category=selected_categories)
+        else:
+            return render_template("restaurant_menu.j2", menu_list=all_menu_items, restaurant_name=restaurant_name, food_category=selected_categories)
 
 #-------------------------------ROUTE FOR UPDATING MENU ITEMS BY RESTAURANT------------------------------------------------
 
@@ -169,11 +178,12 @@ def edit_menu_items(menu_itemID):
             restaurant_id = request.form['restaurant']
             item_name = request.form["menu-item-name"]
             calories = request.form["menu-item-calories"]
+            item_cost = request.form["menu-item-price"]
             category = request.form["menu-item-food-category"]
-            query = "UPDATE MenuItems SET name = %s, calories = %s, food_categoryID = %s WHERE menu_itemID = %s;"
-            db.execute_query(db_connection=db_connection, query=query, query_params=(item_name, calories, category, menu_itemID))
+            query = "UPDATE MenuItems SET name = %s, calories = %s, unit_price = %s, food_categoryID = %s WHERE menu_itemID = %s;"
+            db.execute_query(db_connection=db_connection, query=query, query_params=(item_name, calories, item_cost, category, menu_itemID))
             
-            menu_query = """SELECT MenuItems.restaurantID, MenuItems.menu_itemID, MenuItems.name AS Item, MenuItems.calories AS Calories, FoodCategories.name AS Category
+            menu_query = """SELECT MenuItems.restaurantID, MenuItems.menu_itemID, MenuItems.name AS Item, MenuItems.calories AS Calories, MenuItems.unit_price AS Price, FoodCategories.name AS Category
             FROM MenuItems JOIN Restaurants ON MenuItems.restaurantID = Restaurants.restaurantID
             LEFT JOIN FoodCategories ON MenuItems.food_categoryID = FoodCategories.food_categoryID
             WHERE Restaurants.restaurantID = %s;""" % (restaurant_id)
@@ -191,7 +201,7 @@ def edit_menu_items(menu_itemID):
 
     # if user wishes to access updated list of all restaurants in database
     if request.method == "GET":
-        menu_query = """SELECT MenuItems.restaurantID, MenuItems.menu_itemID, MenuItems.name AS Item, MenuItems.calories AS Calories, FoodCategories.name AS Category
+        menu_query = """SELECT MenuItems.restaurantID, MenuItems.menu_itemID, MenuItems.name AS Item, MenuItems.calories AS Calories, MenuItems.unit_price AS Price, FoodCategories.name AS Category
         FROM MenuItems JOIN Restaurants ON MenuItems.restaurantID = Restaurants.restaurantID
         LEFT JOIN FoodCategories ON MenuItems.food_categoryID = FoodCategories.food_categoryID
         WHERE MenuItems.menu_itemID = %s;""" % (menu_itemID)
@@ -223,7 +233,7 @@ def delete_menu_item(menu_itemID):
     delete_query = "DELETE FROM MenuItems WHERE menu_itemID = %s" % (menu_itemID)
     db.execute_query(db_connection=db_connection, query=delete_query)
 
-    menu_query = """SELECT MenuItems.restaurantID, MenuItems.menu_itemID, MenuItems.name AS Item, MenuItems.calories AS Calories, FoodCategories.name AS Category
+    menu_query = """SELECT MenuItems.restaurantID, MenuItems.menu_itemID, MenuItems.name AS Item, MenuItems.calories AS Calories, MenuItems.unit_price AS Price, FoodCategories.name AS Category
     FROM MenuItems JOIN Restaurants ON MenuItems.restaurantID = Restaurants.restaurantID
     LEFT JOIN FoodCategories ON MenuItems.food_categoryID = FoodCategories.food_categoryID
     WHERE Restaurants.restaurantID = %s;""" % (restaurant_id)
@@ -237,7 +247,12 @@ def delete_menu_item(menu_itemID):
     category_query = "SELECT * FROM FoodCategories"
     categories = db.execute_query(db_connection=db_connection, query=category_query)
     selected_categories = categories.fetchall()
-    return render_template("restaurant_menu.j2", menu_list=all_menu_items, restaurant_name=restaurant_name, food_category=selected_categories)
+    
+    # if user deletes only menu item in entire restaurant menu
+    if matching_items.rowcount == 0:
+            return render_template("menu_not_found.j2", selected_restaurant=restaurant_name, food_category=selected_categories)
+    else:
+        return render_template("restaurant_menu.j2", menu_list=all_menu_items, restaurant_name=restaurant_name, food_category=selected_categories)
 
 #--------------------------------------------RESTAURANTSALESINVOICES TABLE OPERATIONS-------------------------------------------------    
 

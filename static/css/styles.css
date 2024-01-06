@@ -134,3 +134,7 @@ button {
 #edit-menu-item{
     display: none;
 }
+
+#add-first-item{
+    display: none;
+}

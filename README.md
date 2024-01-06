@@ -58,7 +58,7 @@ This may also affect the website address that will display the UI
 
 
 # Populating Database with Additional Sample Data
-The repository files include the "add_menus.json" and "data_collection.py" files, which can be utilized for populating the database with addtional menu items to allow for increased flexibility in testing and modifying database values.
+The repository files include the "sample_data.json" and "data_collection.py" files, which can be utilized for populating the database with addtional menu items to allow for increased flexibility in testing and modifying database values.
 
 To populate the database with the additional information, execute the "data_collection.py" file which will organize and populate the database with the information stored in the "add_menus.json" file
 
