@@ -30,6 +30,7 @@ CREATE OR REPLACE TABLE MenuItems (
     menu_itemID int NOT NULL AUTO_INCREMENT,
     name varchar(255) NOT NULL,
     calories int NOT NULL,
+    unit_price decimal(4,2) NOT NULL,
     food_categoryID int,
     restaurantID int,
     PRIMARY KEY (menu_itemID),
@@ -102,6 +103,7 @@ VALUES
 INSERT INTO MenuItems (
     name,
     calories,
+    unit_price,
     food_categoryID,
     restaurantID
 )
@@ -110,55 +112,55 @@ VALUES
     -- ("Dynamo-Twister", 600, (SELECT food_categoryID FROM FoodCategories WHERE name="American"),
     -- (SELECT restaurantID FROM Restaurants WHERE restaurantID = 1)),
 
-    ("melgalllll Sandwich", 319, (SELECT food_categoryID FROM FoodCategories WHERE name="Sandwiches"),
+    ("Melgal Sandwich", 319, 5.29, (SELECT food_categoryID FROM FoodCategories WHERE name="Sandwiches"),
     (SELECT restaurantID FROM Restaurants WHERE restaurantID = 1)),
 
-    ("Caesar Dressing", 120, (SELECT food_categoryID FROM FoodCategories WHERE name="Italian"),
+    (" Ultimate Caesar Salad", 120, 6.25, (SELECT food_categoryID FROM FoodCategories WHERE name="Italian"),
     (SELECT restaurantID FROM Restaurants WHERE restaurantID = 2)),
 
-    ("Trick OREO Treat Ice Cream", 300, (SELECT food_categoryID FROM FoodCategories WHERE name="American"),
+    ("Trick OREO Treat Ice Cream", 300, 4.50, (SELECT food_categoryID FROM FoodCategories WHERE name="American"),
     (SELECT restaurantID FROM Restaurants WHERE restaurantID = 3)),
 
-    ("Sweet Fries Snack", 1150, (SELECT food_categoryID FROM FoodCategories WHERE name="Hamburger"),
+    ("Sweet Fries Snack", 1150, 7.65, (SELECT food_categoryID FROM FoodCategories WHERE name="Hamburger"),
     (SELECT restaurantID FROM Restaurants WHERE restaurantID = 4)),
 
-    ("Egg-on Steak", 860, (SELECT food_categoryID FROM FoodCategories WHERE name="Barbeque"),
+    ("Egg-on Steak", 860, 9.45, (SELECT food_categoryID FROM FoodCategories WHERE name="Barbeque"),
     (SELECT restaurantID FROM Restaurants WHERE restaurantID = 5)),
 
-    ("Spinach Salad", 360, (SELECT food_categoryID FROM FoodCategories WHERE name="Steak"),
+    ("Spinach Salad", 360, 5.34, (SELECT food_categoryID FROM FoodCategories WHERE name="Steak"),
     (SELECT restaurantID FROM Restaurants WHERE restaurantID = 6)),
 
-    ("Shrimp Ramen", 250, (SELECT food_categoryID FROM FoodCategories WHERE name="Japanese"),
+    ("Shrimp Ramen", 250, 8.67, (SELECT food_categoryID FROM FoodCategories WHERE name="Japanese"),
     (SELECT restaurantID FROM Restaurants WHERE restaurantID = 7)),
 
-    ("Passion Fruit Tart", 400, (SELECT food_categoryID FROM FoodCategories WHERE name="Indian"),
+    ("Passion Fruit Tart", 400, 4.23, (SELECT food_categoryID FROM FoodCategories WHERE name="Indian"),
     (SELECT restaurantID FROM Restaurants WHERE restaurantID = 8)),
 
-    ("Hand battered Fish Dinner", 750, (SELECT food_categoryID FROM FoodCategories WHERE name="Thai"),
+    ("Hand battered Fish Dinner", 750, 9.23, (SELECT food_categoryID FROM FoodCategories WHERE name="Thai"),
     (SELECT restaurantID FROM Restaurants WHERE restaurantID = 9)),
 
-    ("Salmon Sashimi", 300, (SELECT food_categoryID FROM FoodCategories WHERE name="Sushi"),
+    ("Salmon Sashimi", 300, 12.43, (SELECT food_categoryID FROM FoodCategories WHERE name="Sushi"),
     (SELECT restaurantID FROM Restaurants WHERE restaurantID = 10)),
 
-    ("Shirmp Salad", 500, (SELECT food_categoryID FROM FoodCategories WHERE name="Seafood"),
+    ("Shirmp Salad", 500, 10.25, (SELECT food_categoryID FROM FoodCategories WHERE name="Seafood"),
     (SELECT restaurantID FROM Restaurants WHERE restaurantID = 11)),
 
-    ("Chili Burrito", 450, (SELECT food_categoryID FROM FoodCategories WHERE name="Mexican"),
+    ("Chili Burrito", 450, 7.66, (SELECT food_categoryID FROM FoodCategories WHERE name="Mexican"),
     (SELECT restaurantID FROM Restaurants WHERE restaurantID = 12)),
 
-    ("Supreme Veggie Pizza", 900, (SELECT food_categoryID FROM FoodCategories WHERE name="Pizza"),
+    ("Supreme Veggie Pizza", 900, 8.65, (SELECT food_categoryID FROM FoodCategories WHERE name="Pizza"),
     (SELECT restaurantID FROM Restaurants WHERE restaurantID = 13)),
 
-    ("Wanton Soup", 650, (SELECT food_categoryID FROM FoodCategories WHERE name="Chinese"),
+    ("Wanton Soup", 650, 6.28, (SELECT food_categoryID FROM FoodCategories WHERE name="Chinese"),
     (SELECT restaurantID FROM Restaurants WHERE restaurantID = 14)),
 
-    ("Clam Chowder Soup", 600, (SELECT food_categoryID FROM FoodCategories WHERE name="French"),
+    ("Clam Chowder Soup", 600, 12.23, (SELECT food_categoryID FROM FoodCategories WHERE name="French"),
     (SELECT restaurantID FROM Restaurants WHERE restaurantID = 15)),
 
-    ("Mediterranean Ratatouille", 246, (SELECT food_categoryID FROM FoodCategories WHERE name="Italian"),
+    ("Mediterranean Ratatouille", 246, 14.36, (SELECT food_categoryID FROM FoodCategories WHERE name="Italian"),
     (SELECT restaurantID FROM Restaurants WHERE restaurantID = 8)),
 
-    ("Swordfish Soba Noodle", 420, (SELECT food_categoryID FROM FoodCategories WHERE name="Seafood"),
+    ("Swordfish Soba Noodle", 420, 17.56, (SELECT food_categoryID FROM FoodCategories WHERE name="Seafood"),
     (SELECT restaurantID FROM Restaurants WHERE restaurantID = 8));
 
 

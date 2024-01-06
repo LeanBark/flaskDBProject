@@ -44,6 +44,7 @@ Example for .env format:
 Ensure the .env definition names match those requested within the db_connector.py
 
 In IDE terminal:
+- Change to "flaskDBProject" directory (Usually "cd ./flaskDBProject" in CLI)
 - Execute "app.py" to start Flask server
 - You should now be able to access a locally-hosted version of the app at the address "http://localhost:PORT"
 - PORT value should be defined in app.py
@@ -64,17 +65,17 @@ To populate the database with the additional information, execute the "data_coll
 # Citations
 
 Citation for the UI templating/design/structure and database connection procedures:
-    Date: 12/20/2023
-    Adapted form the OSU CS340 Flask Starter App
-    Source URL: https://github.com/osu-cs340-ecampus/flask-starter-app/tree/master?tab=readme-ov-file
+- Date: 12/20/2023
+- Adapted form the OSU CS340 Flask Starter App
+- Source URL: https://github.com/osu-cs340-ecampus/flask-starter-app/tree/master?tab=readme-ov-file
 
 Citation for Icons:
-    Date: 1/3/2024
-    Icons for Submit, Delete, and Edit buttons were provided from svgrepo.com
-    Source URL for Edit Icons: https://www.svgrepo.com/svg/521620/edit
-    Source Url for Delete Icons: https://www.svgrepo.com/svg/502614/delete
+- Date: 1/3/2024
+- Icons for Submit, Delete, and Edit buttons were provided from svgrepo.com
+- Source URL for Edit Icons: https://www.svgrepo.com/svg/521620/edit
+- Source Url for Delete Icons: https://www.svgrepo.com/svg/502614/delete
 
 Citation for Bootstrap:
-    Date: 1/4/2024
-    Bootstrap utility for layout design/styling obtained from https://getbootstrap.com
-    Source URL: https://getbootstrap.com/docs/5.3/getting-started/introduction/
+- Date: 1/4/2024
+- Bootstrap utility for layout design/styling obtained from https://getbootstrap.com
+- Source URL: https://getbootstrap.com/docs/5.3/getting-started/introduction/
