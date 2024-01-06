@@ -39,6 +39,7 @@
                     <p>Select An Item from {{restaurant_name[0].name}}'s Menu</p> 
                     <div class="row justify-content-center">
                         <div class="col-6">
+                            <label for="menu-item-id">Menu Item:</label>
                             <select class="form-select" id="menu-item-id" name="menu-item-id" required>
                                 {% for item in menu %}
                                     {% if item.menu_itemID == invoices[0].menu_itemID %}
@@ -48,6 +49,10 @@
                                     {% endif %}
                                 {% endfor %}
                             </select>
+                        </div>
+                        <div class="col-3">
+                            <label for="quantity-sold">Quantity Sold:</label>
+                            <input class="form-control" type="number" name="quantity-sold" id="quantity-sold" value="{{invoices[0].Quantity}}" required>
                         </div>
                     </div>
                     <div class=""d-grid gap-2 d-md-block">

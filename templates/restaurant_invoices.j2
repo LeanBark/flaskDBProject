@@ -87,12 +87,13 @@
                     <legend class="float-none w-auto">Create A New Invoice</legend>
                     <p>Select Sold Item from <strong>{{invoices[0].Restaurant}}</strong> Menu</p>
                     <div class="input-group">        
-                        <select class="form-select" name="menu-item-value" id="menu-item-value">
+                        <select class="form-select" name="menu-item-value" id="menu-item-value" required>
                             <option value="">Select Menu Item</option>
                             {% for item in menu %}
                             <option value="{{item.menu_itemID}}">{{item.name}}</option>
                             {% endfor %}
                         </select>
+                        <input class="form-control" type="number" name="quantity-sold" id="quantity-sold" placeholder="Quantity Value" required>
 
                         <button class="btn btn-success" type="submit" name="Add Invoice" value="Add Invoice" id="Add Invoice">Add Invoice</button>
                         <input class="btn btn-danger" type="button" value="Cancel" onclick="showInvoices()">
@@ -110,10 +111,13 @@
                     <input type="hidden" id="invoice-id" value="{{invoices[0].invoiceID}}" required>
                     <div class="input-group">
                         <label for="restaurant-id">Restaurant:</label>
-                        <input class="form-control" type="text" id="restaurant-id" placeholder="{{invoices[0].restaurantID}}" required>
+                        <input class="form-control" type="text" id="restaurant-id" value="{{invoices[0].restaurantID}}" required>
                         
                         <label for="menu-item-id">Menu Item:</label>
-                        <input class="form-control" type="text" id="menu-item-id" placeholder="{{invoices[0].menu_itemID}}" required>
+                        <input class="form-control" type="text" id="menu-item-id" value="{{invoices[0].menu_itemID}}" required>
+
+                        <label for="quantity-sold">Quantity Sold:</label>
+                        <input class="form-control" type="number" name="quantity-sold" id="quantity-sold" value="{{invoices[0].Quantity}}" required>
                         
                         <input class="btn btn-danger" type="button" value="Cancel" onclick="showInvoices()">
                     </div>

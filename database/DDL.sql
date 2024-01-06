@@ -44,6 +44,7 @@ CREATE OR REPLACE TABLE MenuItems (
 CREATE OR REPLACE TABLE RestaurantSalesInvoices (
     invoiceID int NOT NULL AUTO_INCREMENT,
     menu_itemID int,
+    quantity_sold int NOT NULL,
     restaurantID int,
     PRIMARY KEY (invoiceID),
     FOREIGN KEY (menu_itemID) REFERENCES MenuItems(menu_itemID)
@@ -109,8 +110,6 @@ INSERT INTO MenuItems (
 )
 
 VALUES 
-    -- ("Dynamo-Twister", 600, (SELECT food_categoryID FROM FoodCategories WHERE name="American"),
-    -- (SELECT restaurantID FROM Restaurants WHERE restaurantID = 1)),
 
     ("Melgal Sandwich", 319, 5.29, (SELECT food_categoryID FROM FoodCategories WHERE name="Sandwiches"),
     (SELECT restaurantID FROM Restaurants WHERE restaurantID = 1)),
@@ -167,27 +166,28 @@ VALUES
 -------------------------POPULATING RESTAURANTSALESINVOICES TABLE----------------------
 INSERT INTO RestaurantSalesInvoices (
     menu_itemID,
+    quantity_sold,
     restaurantID
 )
 
 VALUES 
-    (1, 1),
-    (2, 2),
-    (3, 3),
-    (4, 4),
-    (5, 5),
-    (6, 6),
-    (7, 7),
-    (8, 8),
-    (9, 9),
-    (10, 10),
-    (11, 11),
-    (12, 12),
-    (13, 13),
-    (14, 14),
-    (15, 15),
-    (16, 8),
-    (17,8);
+    (1, 3, 1),
+    (2, 2, 2),
+    (3, 1, 3),
+    (4, 2, 4),
+    (5, 3, 5),
+    (6, 4, 6),
+    (7, 2, 7),
+    (8, 1, 8),
+    (9, 2, 9),
+    (10, 3, 10),
+    (11, 1, 11),
+    (12, 2, 12),
+    (13, 3, 13),
+    (14, 2, 14),
+    (15, 3, 15),
+    (16, 4, 8),
+    (17, 2, 8);
 
 SET FOREIGN_KEY_CHECKS = 1;
 COMMIT;
