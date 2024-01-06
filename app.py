@@ -112,7 +112,8 @@ def display_menu_items(restaurantID):
             category_query = "SELECT * FROM FoodCategories"
             categories = db.execute_query(db_connection=db_connection, query=category_query)
             selected_categories = categories.fetchall()
-                        # if there are no invoices associated with the selected restaurant
+            
+            # if there are no invoices associated with the selected restaurant
             if matching_items.rowcount == 0:
                 return render_template("menu_not_found.j2", selected_restaurant=restaurant_name, food_category=selected_categories)
 
@@ -162,6 +163,8 @@ def display_menu_items(restaurantID):
         category_query = "SELECT * FROM FoodCategories"
         categories = db.execute_query(db_connection=db_connection, query=category_query)
         selected_categories = categories.fetchall()
+        
+        # if there are no invoices linked to selected restaurant
         if matching_items.rowcount == 0:
                 return render_template("menu_not_found.j2", selected_restaurant=restaurant_name, food_category=selected_categories)
         else:
