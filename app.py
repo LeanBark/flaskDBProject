@@ -1,5 +1,6 @@
 from flask import Flask, render_template, json, redirect
 from flask import request
+from datetime import date
 import database.db_connector as db
 import os
 
@@ -12,7 +13,7 @@ app.static_folder = 'static'
 
 @app.route('/')
 def root():
-    restaurant_query = "SELECT * FROM Restaurants;"
+    restaurant_query = "SELECT * FROM Restaurants ORDER BY name ASC;"
     restaurants = db.execute_query(db_connection=db_connection, query=restaurant_query)
     all_restaurants = restaurants.fetchall()
     return render_template("main.j2", restaurants=all_restaurants)
@@ -36,7 +37,7 @@ def restaurants():
     # if user wishes to view the information of the selected restaurant
     if request.method == "GET":
         query = """SELECT Restaurants.restaurantID AS Id, Restaurants.name AS Name, Restaurants.address AS Address, FoodCategories.name AS Category 
-        FROM Restaurants INNER JOIN FoodCategories ON Restaurants.food_categoryID = FoodCategories.food_categoryID;"""
+        FROM Restaurants INNER JOIN FoodCategories ON Restaurants.food_categoryID = FoodCategories.food_categoryID ORDER BY Restaurants.restaurantID ASC;"""
         cursor = db.execute_query(db_connection=db_connection, query=query)
         results = cursor.fetchall()
         query1 = "SELECT * FROM FoodCategories ORDER BY food_categoryID ASC;"
@@ -84,7 +85,7 @@ def delete_restaurant(restaurantID):
 @app.route("/restaurant-menu")
 #if user wishes to view master table of all items within MenuItems table stored in database
 def display_all_items():
-    all_items_query = "SELECT * FROM MenuItems;"
+    all_items_query = "SELECT * FROM MenuItems ORDER BY menu_itemID ASC;"
     returned_items = db.execute_query(db_connection=db_connection, query=all_items_query)
     all_items = returned_items.fetchall()
     return render_template("menu_items.j2", item_list=all_items)
@@ -264,7 +265,7 @@ def delete_menu_item(menu_itemID):
 @app.route("/invoices")
 def display_all_invoices():
     # if user wishes to reference master table of all restaurant sales invoices
-    universal_invoice_query = "SELECT * FROM RestaurantSalesInvoices;"
+    universal_invoice_query = "SELECT * FROM RestaurantSalesInvoices ORDER BY invoiceID ASC;"
     universal_invoices = db.execute_query(db_connection=db_connection, query=universal_invoice_query)
     result_invoices = universal_invoices.fetchall()
     return render_template("invoices.j2", invoice_list=result_invoices)
@@ -273,11 +274,13 @@ def display_all_invoices():
 
 @app.route("/invoices/<int:restaurantID>", methods=["GET", "POST"])
 def display_invoices(restaurantID):
+    
     # if user wishes to view the table containing the current invoices of the selected restaurant
     if request.method == "POST":
         if request.form.get("View Restaurant Invoices"):
             invoices_query = """SELECT RestaurantSalesInvoices.invoiceID, RestaurantSalesInvoices.restaurantID, Restaurants.name AS Restaurant,
-            MenuItems.name AS Item, RestaurantSalesInvoices.quantity_sold AS Quantity FROM RestaurantSalesInvoices
+            MenuItems.name AS Item, RestaurantSalesInvoices.quantity_sold AS Quantity, RestaurantSalesInvoices.quantity_sold * MenuItems.unit_price AS SaleTotal 
+            FROM RestaurantSalesInvoices
             JOIN Restaurants ON RestaurantSalesInvoices.restaurantID = Restaurants.restaurantID
             JOIN MenuItems ON RestaurantSalesInvoices.menu_itemID = MenuItems.menu_itemID
             WHERE RestaurantSalesInvoices.restaurantID = %s;""" % (restaurantID)
@@ -286,7 +289,7 @@ def display_invoices(restaurantID):
             menu_item_query = "SELECT * FROM MenuItems WHERE MenuItems.restaurantID = %s;" % (restaurantID)
             menu_list = db.execute_query(db_connection=db_connection, query=menu_item_query)
             menu_items = menu_list.fetchall()
-            
+
             # if there are no invoices associated with the selected restaurant
             if invoice_list.rowcount == 0:
                 restaurant_query = "SELECT * FROM Restaurants WHERE restaurantID = %s" % (restaurantID)
@@ -305,7 +308,8 @@ def display_invoices(restaurantID):
             db.execute_query(db_connection=db_connection, query=insert_query, query_params=(menu_item_ID, quantity_sold, restaurantID))
 
             invoices_query = """SELECT RestaurantSalesInvoices.invoiceID, RestaurantSalesInvoices.restaurantID, Restaurants.name AS Restaurant,
-            MenuItems.name AS Item, RestaurantSalesInvoices.quantity_sold AS Quantity FROM RestaurantSalesInvoices 
+            MenuItems.name AS Item, RestaurantSalesInvoices.quantity_sold AS Quantity, RestaurantSalesInvoices.quantity_sold * MenuItems.unit_price AS SaleTotal
+            FROM RestaurantSalesInvoices 
             JOIN Restaurants ON RestaurantSalesInvoices.restaurantID = Restaurants.restaurantID
             JOIN MenuItems ON RestaurantSalesInvoices.menu_itemID = MenuItems.menu_itemID
             WHERE RestaurantSalesInvoices.restaurantID = %s;""" % (restaurantID)
@@ -315,6 +319,7 @@ def display_invoices(restaurantID):
             menu_item_query = "SELECT * FROM MenuItems WHERE MenuItems.restaurantID = %s" % (restaurantID)
             menu_list = db.execute_query(db_connection=db_connection, query=menu_item_query)
             menu_items = menu_list.fetchall()
+            
             return render_template("restaurant_invoices.j2", invoices=invoices, menu=menu_items)
 
         else:
@@ -324,7 +329,8 @@ def display_invoices(restaurantID):
     # if user wishes to revist the tables of currently existing invoices for the selected restaurant
     else:
         invoices_query = """SELECT RestaurantSalesInvoices.invoiceID, RestaurantSalesInvoices.restaurantID, Restaurants.name AS Restaurant,
-        MenuItems.name AS Item, RestaurantSalesInvoices.quantity_sold AS Quantity FROM RestaurantSalesInvoices 
+        MenuItems.name AS Item, RestaurantSalesInvoices.quantity_sold AS Quantity, RestaurantSalesInvoices.quantity_sold * MenuItems.unit_price AS SaleTotal
+        FROM RestaurantSalesInvoices 
         JOIN Restaurants ON RestaurantSalesInvoices.restaurantID = Restaurants.restaurantID
         JOIN MenuItems ON RestaurantSalesInvoices.menu_itemID = MenuItems.menu_itemID
         WHERE RestaurantSalesInvoices.restaurantID = %s;""" % (restaurantID)
@@ -334,6 +340,7 @@ def display_invoices(restaurantID):
         menu_item_query = "SELECT * FROM MenuItems WHERE MenuItems.restaurantID = %s;" % (restaurantID)
         menu_list = db.execute_query(db_connection=db_connection, query=menu_item_query)
         menu_items = menu_list.fetchall()
+        
         return render_template("restaurant_invoices.j2", invoices=invoices, menu=menu_items)
 
 #-------------------------------ROUTE FOR UPDATING INVOICES BY RESTAURANT--------------------------------------------------
@@ -351,7 +358,8 @@ def edit_invoice(invoiceID):
             db.execute_query(db_connection=db_connection, query=query, query_params=(item_id, quantity_sold, restaurant_id, invoiceID))
             
             invoice_query = """SELECT RestaurantSalesInvoices.invoiceID, RestaurantSalesInvoices.restaurantID, Restaurants.name AS Restaurant,
-            MenuItems.name AS Item, RestaurantSalesInvoices.quantity_sold AS Quantity FROM RestaurantSalesInvoices 
+            MenuItems.name AS Item, RestaurantSalesInvoices.quantity_sold AS Quantity, RestaurantSalesInvoices.quantity_sold * MenuItems.unit_price AS SaleTotal
+            FROM RestaurantSalesInvoices 
             JOIN Restaurants ON RestaurantSalesInvoices.restaurantID = Restaurants.restaurantID
             JOIN MenuItems ON RestaurantSalesInvoices.menu_itemID = MenuItems.menu_itemID
             WHERE RestaurantSalesInvoices.restaurantID = %s;""" % (restaurant_id)
@@ -370,7 +378,8 @@ def edit_invoice(invoiceID):
     # if user decides to edit the information of an invoice within selected restaurant's list of invoices    
     if request.method == "GET":
         invoice_query = """SELECT RestaurantSalesInvoices.invoiceID, RestaurantSalesInvoices.restaurantID, RestaurantSalesInvoices.menu_itemID,
-        Restaurants.name AS Restaurant, MenuItems.name AS Item, RestaurantSalesInvoices.quantity_sold AS Quantity FROM RestaurantSalesInvoices 
+        Restaurants.name AS Restaurant, MenuItems.name AS Item, RestaurantSalesInvoices.quantity_sold AS Quantity, RestaurantSalesInvoices.quantity_sold * MenuItems.unit_price AS SaleTotal
+        FROM RestaurantSalesInvoices 
         JOIN Restaurants ON RestaurantSalesInvoices.restaurantID = Restaurants.restaurantID
         JOIN MenuItems ON RestaurantSalesInvoices.menu_itemID = MenuItems.menu_itemID
         WHERE RestaurantSalesInvoices.invoiceID = %s;""" % (invoiceID)

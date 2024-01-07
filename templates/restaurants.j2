@@ -115,18 +115,18 @@
                         <div class="row">
                             <div class="col-4">
                                 <label for="restaurant-name">Restaurant</label>
-                                <input class="form-control" type="text" name="restaurant-name" id="restaurant-name" placeholder="Enter Restaurant Name">
+                                <input class="form-control" type="text" name="restaurant-name" id="restaurant-name" placeholder="Enter Restaurant Name" required>
                             </div>
 
                             <div class="col-4">
                                 <label for="restaurant-address">Address</label>
-                                <input class="form-control" type="text" name="restaurant-address" id="restaurant-address" placeholder="Enter Street Address">
+                                <input class="form-control" type="text" name="restaurant-address" id="restaurant-address" placeholder="Enter Street Address" required>
                             </div>
 
 
                             <div class="col-4">
                                 <label for="restaurant-food-category">Food Category</label>
-                                <select class="form-select" name="restaurant-food-category" id="restaurant-food-category">
+                                <select class="form-select" name="restaurant-food-category" id="restaurant-food-category" required>
                                     <option value="">Select a Food Category</option>
                                     {% for category in food_category %}
                                     <option value="{{category.food_categoryID}}">{{category.name}}</option>

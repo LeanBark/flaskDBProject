@@ -8,7 +8,7 @@ The locally-implemented mariaDB database stores information in terms of:
 - Each restaurant's menu item information (for all items listed in their respective menus)
 - Sales invoices for each restaurant in terms of the item from their menu that was sold
 
-This implementation was designed for use as an accessible back-end user interface for database access/maintenance
+This implementation was designed for use as an accessible back-end user interface for database access/maintenance. This allows views table to be made for basic cost and sales analysis. Future plans to include date values to invoice records.
 
 # Environment Setup
 
