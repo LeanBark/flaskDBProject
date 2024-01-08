@@ -79,3 +79,8 @@ Citation for Bootstrap and its implementation based on the provided documentatio
 - Date: 1/4/2024
 - Bootstrap utility for layout design/styling obtained from https://getbootstrap.com
 - Source URL: https://getbootstrap.com/docs/5.3/getting-started/introduction/
+
+Citation for jQuery and CDN deliverables (implementation for datepicker):
+- Date: 1/7/2024
+- Jquery format and CDN deliverables obtained from https://api.jquery.com/
+- Source URL: https://jquery.com/download/

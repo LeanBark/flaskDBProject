@@ -3,7 +3,9 @@
 
 <head>
     <title>Edit Invoice Information</h1></title>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
     <link rel="stylesheet" type="text/css" href="../static/css/styles.css"/>
 </head>
 <header>
@@ -57,8 +59,8 @@
                     <legend class="float-none w-auto">Edit Restaurant Invoice</legend>
                     <input class="form-control" type="hidden" id="restaurant-id" name="restaurant-id" value="{{invoices[0].restaurantID}}" required>
                     <p>Select An Item from {{restaurant_name[0].name}}'s Menu</p> 
-                    <div class="row justify-content-center">
-                        <div class="col-6">
+                    <div class="row">
+                        <div class="col-5">
                             <label for="menu-item-id">Menu Item:</label>
                             <select class="form-select" id="menu-item-id" name="menu-item-id" required>
                                 {% for item in menu %}
@@ -74,6 +76,10 @@
                             <label for="quantity-sold">Quantity Sold:</label>
                             <input class="form-control" type="number" name="quantity-sold" id="quantity-sold" value="{{invoices[0].Quantity}}" required>
                         </div>
+                        <div class="col-4">
+                            <label for="sales-date">Date Sold:</label>
+                            <input type="text" id="sales-date" name="sales-date" class="form-control" value="{{invoices[0].DateSold}}" required>
+                        </div>
                     </div>
                     <div class=""d-grid gap-2 d-md-block">
                         <button class="btn btn-success" type="submit" value="Edit Invoice" name="Edit Invoice" id="Edit Invoice">Submit</button>
@@ -83,9 +89,68 @@
             </form>
         </div>
     </div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script>
+    $(document).ready(function(){
+        $("#display-invoices").css("display","block");
+        $("#add-invoice-btn").css("display", "block");
+        $("#add-invoice").css("display", "none");
+        $("#edit-invoice").css("display", "none");
+
+
+    });
+
+    $(function() {
+        $("#sales-date").datepicker({  
+            autoclose: true,  
+            todayHighlight: true,
+            format: "yyyy-mm-dd"
+        });
+    });
+
+
+    function displayController(situation){
+        if(situation == "add"){
+            $("#display-invoices").css("display", "none");
+            $("#add-invoice-btn").css("display", "none");
+            $("#add-invoice").css("display", "block");
+            $("#edit-invoice").css("display", "none");
+        }
+
+        else if(situation == "edit"){
+        $("#display-invoices").css("display", "none");
+            $("#add-invoice-btn").css("display", "none");
+            $("#add-invoice").css("display", "none");
+            $("#edit-invoice").css("display", "block");
+        }
+
+        else {
+            $("#display-invoices").css("display", "block");
+            $("#add-invoice-btn").css("display", "block");
+            $("#add-invoice").css("display", "none");
+            $("#edit-invoice").css("display", "none");
+        }
+    }
+
+    function addInvoice() {
+        displayController('add');
+    }
+
+    function editInvoice() {
+        displayController('edit');
+    }
+
+    function showInvoices() {
+        displayController('');
+    }
+
+    </script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <script src= "https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
 </body>
 <footer>
     <div class="author-line">&#169 2024 Kevin Parsons</div>
 </footer>
 </html>
+

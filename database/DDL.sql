@@ -45,6 +45,7 @@ CREATE OR REPLACE TABLE RestaurantSalesInvoices (
     invoiceID int NOT NULL AUTO_INCREMENT,
     menu_itemID int,
     quantity_sold int NOT NULL,
+    date_sold date NOT NULL,
     restaurantID int,
     PRIMARY KEY (invoiceID),
     FOREIGN KEY (menu_itemID) REFERENCES MenuItems(menu_itemID)
@@ -167,27 +168,28 @@ VALUES
 INSERT INTO RestaurantSalesInvoices (
     menu_itemID,
     quantity_sold,
+    date_sold,
     restaurantID
 )
 
 VALUES 
-    (1, 3, 1),
-    (2, 2, 2),
-    (3, 1, 3),
-    (4, 2, 4),
-    (5, 3, 5),
-    (6, 4, 6),
-    (7, 2, 7),
-    (8, 1, 8),
-    (9, 2, 9),
-    (10, 3, 10),
-    (11, 1, 11),
-    (12, 2, 12),
-    (13, 3, 13),
-    (14, 2, 14),
-    (15, 3, 15),
-    (16, 4, 8),
-    (17, 2, 8);
+    (1, 3, "2018-09-02", 1),
+    (2, 2, "2016-05-08", 2),
+    (3, 1, "2020-01-21", 3),
+    (4, 2, "2015-08-30", 4),
+    (5, 3, "2022-06-15", 5),
+    (6, 4, "2023-05-18", 6),
+    (7, 2, "2023-11-25", 7),
+    (8, 1, "2017-12-25", 8),
+    (9, 2, "2017-10-30", 9),
+    (10, 3, "2024-01-05", 10),
+    (11, 1, "2020-04-18", 11),
+    (12, 2, "2018-03-01", 12),
+    (13, 3, "2019-02-15", 13),
+    (14, 2, "2016-07-25", 14),
+    (15, 3, "2019-09-21", 15),
+    (16, 4, "2018-10-03", 8),
+    (17, 2, "2016-05-06", 8);
 
 SET FOREIGN_KEY_CHECKS = 1;
 COMMIT;

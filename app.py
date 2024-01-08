@@ -4,10 +4,20 @@ from datetime import date
 import database.db_connector as db
 import os
 
+month_list = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"]
+year_list = []
+today = date.today()
+
+
 db_connection = db.connect_to_database()
 app = Flask(__name__)
 
 app.static_folder = 'static'
+
+#TODO: Modularize redendent query code blocks
+#TODO: Implement Pandas functionality to generate mock reports 
+#TODO: Add comments for functions and parameters with type hinting
+#TODO: Additional error-catching for queries and posts
 
 #------------------------------------ROUTE FOR HOMEPAGE----------------------------------------------------------------------
 
@@ -279,7 +289,8 @@ def display_invoices(restaurantID):
     if request.method == "POST":
         if request.form.get("View Restaurant Invoices"):
             invoices_query = """SELECT RestaurantSalesInvoices.invoiceID, RestaurantSalesInvoices.restaurantID, Restaurants.name AS Restaurant,
-            MenuItems.name AS Item, RestaurantSalesInvoices.quantity_sold AS Quantity, RestaurantSalesInvoices.quantity_sold * MenuItems.unit_price AS SaleTotal 
+            MenuItems.name AS Item, RestaurantSalesInvoices.quantity_sold AS Quantity, RestaurantSalesInvoices.date_sold AS DateSold,
+            RestaurantSalesInvoices.quantity_sold * MenuItems.unit_price AS SaleTotal 
             FROM RestaurantSalesInvoices
             JOIN Restaurants ON RestaurantSalesInvoices.restaurantID = Restaurants.restaurantID
             JOIN MenuItems ON RestaurantSalesInvoices.menu_itemID = MenuItems.menu_itemID
@@ -290,7 +301,6 @@ def display_invoices(restaurantID):
             menu_list = db.execute_query(db_connection=db_connection, query=menu_item_query)
             menu_items = menu_list.fetchall()
 
-            # if there are no invoices associated with the selected restaurant
             if invoice_list.rowcount == 0:
                 restaurant_query = "SELECT * FROM Restaurants WHERE restaurantID = %s" % (restaurantID)
                 restaurant_result = db.execute_query(db_connection=db_connection, query=restaurant_query)
@@ -304,11 +314,13 @@ def display_invoices(restaurantID):
         elif request.form.get("Add Invoice"):
             menu_item_ID = request.form["menu-item-value"]
             quantity_sold = request.form["quantity-sold"]
-            insert_query = "INSERT INTO RestaurantSalesInvoices (menu_itemID, quantity_sold, restaurantID) VALUES (%s, %s, %s);"
-            db.execute_query(db_connection=db_connection, query=insert_query, query_params=(menu_item_ID, quantity_sold, restaurantID))
+            date_sold = request.form.get("sales-date")
+            insert_query = "INSERT INTO RestaurantSalesInvoices (menu_itemID, quantity_sold, date_sold, restaurantID) VALUES (%s, %s, %s, %s);"
+            db.execute_query(db_connection=db_connection, query=insert_query, query_params=(menu_item_ID, quantity_sold, date_sold, restaurantID))
 
             invoices_query = """SELECT RestaurantSalesInvoices.invoiceID, RestaurantSalesInvoices.restaurantID, Restaurants.name AS Restaurant,
-            MenuItems.name AS Item, RestaurantSalesInvoices.quantity_sold AS Quantity, RestaurantSalesInvoices.quantity_sold * MenuItems.unit_price AS SaleTotal
+            MenuItems.name AS Item, RestaurantSalesInvoices.quantity_sold AS Quantity, RestaurantSalesInvoices.date_sold AS DateSold,
+            RestaurantSalesInvoices.quantity_sold * MenuItems.unit_price AS SaleTotal
             FROM RestaurantSalesInvoices 
             JOIN Restaurants ON RestaurantSalesInvoices.restaurantID = Restaurants.restaurantID
             JOIN MenuItems ON RestaurantSalesInvoices.menu_itemID = MenuItems.menu_itemID
@@ -329,7 +341,8 @@ def display_invoices(restaurantID):
     # if user wishes to revist the tables of currently existing invoices for the selected restaurant
     else:
         invoices_query = """SELECT RestaurantSalesInvoices.invoiceID, RestaurantSalesInvoices.restaurantID, Restaurants.name AS Restaurant,
-        MenuItems.name AS Item, RestaurantSalesInvoices.quantity_sold AS Quantity, RestaurantSalesInvoices.quantity_sold * MenuItems.unit_price AS SaleTotal
+        MenuItems.name AS Item, RestaurantSalesInvoices.quantity_sold AS Quantity, RestaurantSalesInvoices.date_sold AS DateSold,
+        RestaurantSalesInvoices.quantity_sold * MenuItems.unit_price AS SaleTotal
         FROM RestaurantSalesInvoices 
         JOIN Restaurants ON RestaurantSalesInvoices.restaurantID = Restaurants.restaurantID
         JOIN MenuItems ON RestaurantSalesInvoices.menu_itemID = MenuItems.menu_itemID
@@ -354,11 +367,13 @@ def edit_invoice(invoiceID):
             restaurant_id = request.form['restaurant-id']
             item_id = request.form["menu-item-id"]
             quantity_sold = request.form["quantity-sold"]
-            query = "UPDATE RestaurantSalesInvoices SET menu_itemID = %s, quantity_sold = %s, restaurantID = %s WHERE invoiceID = %s;"
-            db.execute_query(db_connection=db_connection, query=query, query_params=(item_id, quantity_sold, restaurant_id, invoiceID))
+            date_sold = request.form.get("sales-date")
+            query = "UPDATE RestaurantSalesInvoices SET menu_itemID = %s, quantity_sold = %s, date_sold = %s, restaurantID = %s WHERE invoiceID = %s;"
+            db.execute_query(db_connection=db_connection, query=query, query_params=(item_id, quantity_sold, date_sold, restaurant_id, invoiceID))
             
             invoice_query = """SELECT RestaurantSalesInvoices.invoiceID, RestaurantSalesInvoices.restaurantID, Restaurants.name AS Restaurant,
-            MenuItems.name AS Item, RestaurantSalesInvoices.quantity_sold AS Quantity, RestaurantSalesInvoices.quantity_sold * MenuItems.unit_price AS SaleTotal
+            MenuItems.name AS Item, RestaurantSalesInvoices.quantity_sold AS Quantity, RestaurantSalesInvoices.date_sold AS DateSold,
+            RestaurantSalesInvoices.quantity_sold * MenuItems.unit_price AS SaleTotal
             FROM RestaurantSalesInvoices 
             JOIN Restaurants ON RestaurantSalesInvoices.restaurantID = Restaurants.restaurantID
             JOIN MenuItems ON RestaurantSalesInvoices.menu_itemID = MenuItems.menu_itemID
@@ -378,7 +393,8 @@ def edit_invoice(invoiceID):
     # if user decides to edit the information of an invoice within selected restaurant's list of invoices    
     if request.method == "GET":
         invoice_query = """SELECT RestaurantSalesInvoices.invoiceID, RestaurantSalesInvoices.restaurantID, RestaurantSalesInvoices.menu_itemID,
-        Restaurants.name AS Restaurant, MenuItems.name AS Item, RestaurantSalesInvoices.quantity_sold AS Quantity, RestaurantSalesInvoices.quantity_sold * MenuItems.unit_price AS SaleTotal
+        Restaurants.name AS Restaurant, MenuItems.name AS Item, RestaurantSalesInvoices.quantity_sold AS Quantity, RestaurantSalesInvoices.date_sold AS DateSold,
+        RestaurantSalesInvoices.quantity_sold * MenuItems.unit_price AS SaleTotal
         FROM RestaurantSalesInvoices 
         JOIN Restaurants ON RestaurantSalesInvoices.restaurantID = Restaurants.restaurantID
         JOIN MenuItems ON RestaurantSalesInvoices.menu_itemID = MenuItems.menu_itemID
