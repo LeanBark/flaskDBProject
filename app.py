@@ -18,6 +18,7 @@ app.static_folder = 'static'
 #TODO: Implement Pandas functionality to generate mock reports 
 #TODO: Add comments for functions and parameters with type hinting
 #TODO: Additional error-catching for queries and posts
+#TODO: Update invoices_not_found.jinja2 template for datapicker and jQuery
 
 #------------------------------------ROUTE FOR HOMEPAGE----------------------------------------------------------------------
 
