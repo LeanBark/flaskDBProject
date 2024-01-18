@@ -4,8 +4,7 @@ from datetime import date
 import database.db_connector as db
 import os
 
-month_list = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"]
-year_list = []
+
 today = date.today()
 
 
@@ -18,7 +17,7 @@ app.static_folder = 'static'
 #TODO: Implement Pandas functionality to generate mock reports 
 #TODO: Add comments for functions and parameters with type hinting
 #TODO: Additional error-catching for queries and posts
-#TODO: Update invoices_not_found.jinja2 template for datapicker and jQuery
+
 
 #------------------------------------ROUTE FOR HOMEPAGE----------------------------------------------------------------------
 
