@@ -119,6 +119,30 @@ button {
     margin-right: auto;
 }
 
+.flash {
+    padding: 20px;
+    margin: 20px;
+}
+
+.flash.path-error{
+    background-color: crimson;
+    color:black;
+}
+
+.flash.menu-path-error{
+    background-color: crimson;
+    color:black;
+}
+
+.flash.path-success{
+    background-color:aquamarine;
+    color:black;
+}
+
+.flash.menu-path-success{
+    background-color:aquamarine;
+    color:black;
+}
 /* Ensures transitions between document display formats of restaurant_invoices.j2 and restaurant_menu.j2 are smooth */
 #add-menu-item{
     display: none;   

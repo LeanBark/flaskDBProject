@@ -30,9 +30,23 @@
         </div>
     </nav>
 </header>
+
 <body>
-    <div class="btn-group">
-        <input type="button" value="Add New Invoice" id="add-invoice-btn" onClick="addInvoice()">
+    <div class="notifications">
+        {% for category, message in get_flashed_messages(with_categories=true) %}
+            <div id="flash-message" class="flash {{category}}">{{message}}</div>
+        {% endfor %}
+    </div>
+    <div class="add-invoice-btn">
+        <div class="btn-group">
+            <input type="button" value="Add New Invoice" id="add-invoice-btns" onClick="addInvoice()">
+        </div>
+        <div class="container-fluid">
+            <form id="generate-form" action="/invoices/{{invoices[0].restaurantID}}" method="post">
+                
+                <button class="btn btn-primary" type="submit" value="Generate CSV Report" id="Generate CSV Report" name="Generate CSV Report">Generate CSV Report</button>
+            </form>
+        </div>
     </div>
     <div id="display-invoices">
         <h1>Current Sales Invoices for  {{invoices[0].Restaurant}}</h1>
@@ -117,7 +131,7 @@
         $("#add-invoice-btn").css("display", "block");
         $("#add-invoice").css("display", "none");
         $("#edit-invoice").css("display", "none");
-
+        setTimeout(function (){$("#flash-message").remove();}, 2000);
 
     });
 

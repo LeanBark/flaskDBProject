@@ -9,6 +9,7 @@
             document.getElementById("add-item-btn").style.display = "block";
             document.getElementById("add-menu-item").style.display = "none";
             document.getElementById("edit-menu-item").style.display = "none";
+            setTimeout(function (){document.getElementById("flash-menu-message").remove();}, 2000);
     });
 
     function displayController(situation){
@@ -70,9 +71,25 @@
     </nav>
 </header>
 <body>
-    <div class="btn-group">
-        <input type="button" value="Add New Menu Item" id="add-item-btn" onClick="addMenuItem()">
+    
+
+    <div class="notifications">
+        {% for category, message in get_flashed_messages(with_categories=true) %}
+            <div id="flash-menu-message" class="flash {{category}}">{{message}}</div>
+        {% endfor %}
     </div>
+    <div class="add-item-btn">
+        <div class="btn-group">
+            <input type="button" value="Add New Menu Item" id="add-item-btn" onClick="addMenuItem()">
+        </div>
+    
+        <div class="container-fluid">
+            <form id="generate-menu-form" action="/restaurant-menu/{{menu_list[0].restaurantID}}" method="post">               
+                <button class="btn btn-primary" type="submit" value="Generate Menu CSV" id="Generate Menu CSV" name="Generate Menu CSV">Generate Menu CSV</button>
+            </form>
+        </div>
+    </div>
+
     <div id="display-menus">
         <h1>Menu for {{restaurant_name[0].name}}</h1>
         <table id="restaurant-menu-table">
