@@ -40,15 +40,8 @@
             <p><input type="button" value="Add New Invoice" id="add-invoice-btns" onClick="addInvoice()"></p>
         </div>
         <div class="container-fluid">
-            <label for="generate-form">Generate A CSV Ordered By Selected Value</label>
             <form id="generate-form" action="/invoices/{{invoices[0].restaurantID}}" method="post">
                 <div class="input-group w-50 mx-auto"> 
-                        <select class="form-select" name="order-value" id="order-value" required>
-                                
-                            {% for key,value in order_choices.items() %}
-                                <option value="{{value}}">Order By {{key}}</option>
-                            {% endfor %}
-                        </select>
                         <button class="btn btn-primary" type="submit" value="Generate CSV Report" id="Generate CSV Report" name="Generate CSV Report">Generate CSV Report</button>
                 </div>
             </form>
