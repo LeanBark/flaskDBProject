@@ -86,10 +86,11 @@
                             {% endfor %}
                         </select>
                     
-                    
+                        
                         <input class="form-control" type="number" name="quantity-sold" id="quantity-sold" placeholder="Quantity Value" value="" required>
-                    
                         <input type="text" id="sales-date" name="sales-date" class="form-control" placeholder="YY-MM-DD" value="" required>
+                    
+                        
                                  
                         <button class="btn btn-success" type="submit" name="Add Invoice" value="Add Invoice" id="Add Invoice">Add Invoice</button>
                         <input class="btn btn-danger" type="button" value="Cancel" onclick="showInvoices()">
@@ -110,10 +111,11 @@
     });
 
     $(function() {
-        $("#sales-date").datepicker({  
+        $("#sales-date").datepicker({
             autoclose: true,  
             todayHighlight: true,
             format: "yyyy-mm-dd",
+            orientation: "right bottom"
         });
     });
 
