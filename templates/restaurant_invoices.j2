@@ -6,10 +6,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
     <link rel="stylesheet" type="text/css" href="../static/css/styles.css"/>
-
-
-
 </head>
+
 <header>
     <nav class="navbar fixed-top navbar-expand-lg bg-body-tertiary bg-border-bottom bg-border-body" style="background-color: #0e161a;">
         <div class="container-fluid">
@@ -100,79 +98,46 @@
             </form>
         </div>
     </div>
-
-    <div id="edit-invoice">
-        <div class="container-fluid">
-            <form id="edit-restaurant-form" action="/edit-invoice/{{invoices[0].invoiceID}}" method="post">
-                <fieldset class="form-group border p-3">
-                    <legend class="float-none w-auto">Edit Invoice Information</legend>
-                    <input type="hidden" id="invoice-id" value="{{invoices[0].invoiceID}}" required>
-                    <div class="input-group">
-                        <label for="restaurant-id">Restaurant:</label>
-                        <input class="form-control" type="text" id="restaurant-id" value="{{invoices[0].restaurantID}}" required>
-                        
-                        <label for="menu-item-id">Menu Item:</label>
-                        <input class="form-control" type="text" id="menu-item-id" value="{{invoices[0].menu_itemID}}" required>
-
-                        <label for="quantity-sold">Quantity Sold:</label>
-                        <input class="form-control" type="number" name="quantity-sold" id="quantity-sold" value="{{invoices[0].Quantity}}" required>
-                        
-                        <input class="btn btn-danger" type="button" value="Cancel" onclick="showInvoices()">
-                    </div>
-                </fieldset>
-            </form>
-        </div>
-    </div>
    
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script>
-    $(document).ready(function(){
+    $(document).ready(() => {
         $("#display-invoices").css("display","block");
         $("#add-invoice-btn").css("display", "block");
         $("#add-invoice").css("display", "none");
-        $("#edit-invoice").css("display", "none");
-        setTimeout(function (){$("#flash-message").remove();}, 2000);
-
+        setTimeout(() => {$("#flash-message").remove();}, 1000);
     });
 
     $(function() {
         $("#sales-date").datepicker({  
             autoclose: true,  
             todayHighlight: true,
-            format: "yyyy-mm-dd"
+            format: "yyyy-mm-dd",
         });
     });
-
 
     function displayController(situation){
         if(situation == "add"){
             $("#display-invoices").css("display", "none");
             $("#add-invoice-btn").css("display", "none");
             $("#add-invoice").css("display", "block");
-            $("#edit-invoice").css("display", "none");
         }
 
         else if(situation == "edit"){
         $("#display-invoices").css("display", "none");
             $("#add-invoice-btn").css("display", "none");
             $("#add-invoice").css("display", "none");
-            $("#edit-invoice").css("display", "block");
         }
 
         else {
             $("#display-invoices").css("display", "block");
             $("#add-invoice-btn").css("display", "block");
             $("#add-invoice").css("display", "none");
-            $("#edit-invoice").css("display", "none");
         }
     }
 
     function addInvoice() {
         displayController('add');
-    }
-
-    function editInvoice() {
-        displayController('edit');
     }
 
     function showInvoices() {

@@ -1,4 +1,4 @@
-from flask import Flask, render_template, json, redirect, flash
+from flask import Flask, render_template, json, redirect, flash, url_for
 from flask import request
 from datetime import date
 from io import StringIO
@@ -15,7 +15,7 @@ app = Flask(__name__)
 
 app.static_folder = 'static'
 app.secret_key = "add_secret_key_here"
-#TODO: Modularize redundent query code blocks
+#TODO: Modularize redundant query code blocks
 #TODO: Implement Pandas functionality to generate mock reports 
 #TODO: Add comments for functions and parameters with type hinting
 #TODO: Additional error-catching for queries and posts
@@ -107,8 +107,8 @@ def display_all_items():
 
 @app.route("/restaurant-menu/<int:restaurantID>", methods=["GET", "POST"])
 def display_menu_items(restaurantID):
-    if request.method == "POST":
-        
+    
+    if request.method == "POST":        
         # if user requests access to a specific restaurant's menu in database
         if request.form.get("View Restaurant Menu"):
             menu_query = """SELECT MenuItems.restaurantID, MenuItems.menu_itemID, MenuItems.name AS Item, MenuItems.calories AS Calories, MenuItems.unit_price AS Price, FoodCategories.name AS Category
@@ -141,23 +141,9 @@ def display_menu_items(restaurantID):
             category = request.form["menu-item-food-category"]
             query = "INSERT INTO MenuItems (name, calories, unit_price, food_categoryID, restaurantID) VALUES (%s, %s, %s, %s, %s);"
             db.execute_query(db_connection=db_connection, query=query, query_params=(item_name, calories, item_cost, category, restaurantID))
-            
-            menu_query = """SELECT MenuItems.restaurantID, MenuItems.menu_itemID, MenuItems.name AS Item, MenuItems.calories AS Calories, MenuItems.unit_price AS Price, FoodCategories.name AS Category
-            FROM MenuItems JOIN Restaurants ON MenuItems.restaurantID = Restaurants.restaurantID
-            LEFT JOIN FoodCategories ON MenuItems.food_categoryID = FoodCategories.food_categoryID
-            WHERE Restaurants.restaurantID = %s;""" % (restaurantID)
-            matching_items = db.execute_query(db_connection=db_connection, query=menu_query)
-            all_menu_items = matching_items.fetchall()
-            
-            name_query = "SELECT * FROM Restaurants WHERE restaurantID = %s;" % (restaurantID)
-            matching_restaurant = db.execute_query(db_connection=db_connection, query=name_query)
-            restaurant_name = matching_restaurant.fetchall()
+            return redirect(f"/restaurant-menu/{restaurantID}")
 
-            category_query = "SELECT * FROM FoodCategories"
-            categories = db.execute_query(db_connection=db_connection, query=category_query)
-            selected_categories = categories.fetchall()
-            return render_template("restaurant_menu.j2", menu_list=all_menu_items, restaurant_name=restaurant_name, food_category=selected_categories)
-        
+        # if a user wishes to generate a .csv file of all listed invoice information of restaurant
         elif request.form.get("Generate Menu CSV"):
             menu_query = """SELECT MenuItems.restaurantID, MenuItems.menu_itemID, MenuItems.name AS Item, MenuItems.calories AS Calories, MenuItems.unit_price AS Price, FoodCategories.name AS Category
             FROM MenuItems JOIN Restaurants ON MenuItems.restaurantID = Restaurants.restaurantID
@@ -183,11 +169,7 @@ def display_menu_items(restaurantID):
                 df.to_csv(f"./flaskDBProject/static/restaurant_menus/{restaurant_name[0]['name']}_menu.csv")
                 flash("Invalid Default Path: Menu Downloaded to Current 'static/restaurant_menus' Folder in Current Directory", category="menu-path-error")
             
-            if matching_items.rowcount == 0:
-                return render_template("menu_not_found.j2", selected_restaurant=restaurant_name, food_category=selected_categories)
-
-            else:
-                return render_template("restaurant_menu.j2", menu_list=all_menu_items, restaurant_name=restaurant_name, food_category=selected_categories)
+            return redirect(f"/restaurant-menu/{restaurantID}")
         
         else:
             redirect("/")
@@ -230,22 +212,7 @@ def edit_menu_items(menu_itemID):
             category = request.form["menu-item-food-category"]
             query = "UPDATE MenuItems SET name = %s, calories = %s, unit_price = %s, food_categoryID = %s WHERE menu_itemID = %s;"
             db.execute_query(db_connection=db_connection, query=query, query_params=(item_name, calories, item_cost, category, menu_itemID))
-            
-            menu_query = """SELECT MenuItems.restaurantID, MenuItems.menu_itemID, MenuItems.name AS Item, MenuItems.calories AS Calories, MenuItems.unit_price AS Price, FoodCategories.name AS Category
-            FROM MenuItems JOIN Restaurants ON MenuItems.restaurantID = Restaurants.restaurantID
-            LEFT JOIN FoodCategories ON MenuItems.food_categoryID = FoodCategories.food_categoryID
-            WHERE Restaurants.restaurantID = %s;""" % (restaurant_id)
-            matching_items = db.execute_query(db_connection=db_connection, query=menu_query)
-            all_menu_items = matching_items.fetchall()
-            
-            name_query = "SELECT * FROM Restaurants WHERE restaurantID = %s;" % (restaurant_id)
-            matching_restaurant = db.execute_query(db_connection=db_connection, query=name_query)
-            restaurant_name = matching_restaurant.fetchall()
-
-            category_query = "SELECT * FROM FoodCategories"
-            categories = db.execute_query(db_connection=db_connection, query=category_query)
-            selected_categories = categories.fetchall()
-            return render_template("restaurant_menu.j2", menu_list=all_menu_items, restaurant_name=restaurant_name, food_category=selected_categories)
+            return redirect(f"/restaurant-menu/{restaurant_id}")
 
     # if user wishes to access updated list of all restaurants in database
     if request.method == "GET":
@@ -352,22 +319,7 @@ def display_invoices(restaurantID):
             date_sold = request.form.get("sales-date")
             insert_query = "INSERT INTO RestaurantSalesInvoices (menu_itemID, quantity_sold, date_sold, restaurantID) VALUES (%s, %s, %s, %s);"
             db.execute_query(db_connection=db_connection, query=insert_query, query_params=(menu_item_ID, quantity_sold, date_sold, restaurantID))
-
-            invoices_query = """SELECT RestaurantSalesInvoices.invoiceID, RestaurantSalesInvoices.restaurantID, Restaurants.name AS Restaurant,
-            MenuItems.name AS Item, RestaurantSalesInvoices.quantity_sold AS Quantity, RestaurantSalesInvoices.date_sold AS DateSold,
-            RestaurantSalesInvoices.quantity_sold * MenuItems.unit_price AS SaleTotal
-            FROM RestaurantSalesInvoices 
-            JOIN Restaurants ON RestaurantSalesInvoices.restaurantID = Restaurants.restaurantID
-            JOIN MenuItems ON RestaurantSalesInvoices.menu_itemID = MenuItems.menu_itemID
-            WHERE RestaurantSalesInvoices.restaurantID = %s;""" % (restaurantID)
-            invoice_list = db.execute_query(db_connection=db_connection, query=invoices_query)
-            invoices = invoice_list.fetchall()
-
-            menu_item_query = "SELECT * FROM MenuItems WHERE MenuItems.restaurantID = %s" % (restaurantID)
-            menu_list = db.execute_query(db_connection=db_connection, query=menu_item_query)
-            menu_items = menu_list.fetchall()
-            
-            return render_template("restaurant_invoices.j2", invoices=invoices, menu=menu_items)
+            return redirect(f"/invoices/{restaurantID}")
 
         elif request.form.get("Generate CSV Report"):
             invoices_query = """SELECT RestaurantSalesInvoices.invoiceID, RestaurantSalesInvoices.restaurantID, Restaurants.name AS Restaurant,
@@ -389,18 +341,7 @@ def display_invoices(restaurantID):
                 df.to_csv(f"./flaskDBProject/static/invoice_reports/{invoices[0]['Restaurant']}_invoices.csv")
                 flash("Invalid Default Path: Downloaded to Current 'static/invoice_reports' Folder in Current Directory", category="path-error")
 
-            menu_item_query = "SELECT * FROM MenuItems WHERE MenuItems.restaurantID = %s;" % (restaurantID)
-            menu_list = db.execute_query(db_connection=db_connection, query=menu_item_query)
-            menu_items = menu_list.fetchall()
-
-            if invoice_list.rowcount == 0:
-                restaurant_query = "SELECT * FROM Restaurants WHERE restaurantID = %s" % (restaurantID)
-                restaurant_result = db.execute_query(db_connection=db_connection, query=restaurant_query)
-                selected_restaurant = restaurant_result.fetchall()
-                return render_template("invoices_not_found.j2", selected_restaurant=selected_restaurant, menu=menu_items)
-            
-            else:
-                return render_template("restaurant_invoices.j2", invoices=invoices, menu=menu_items)
+            return redirect(f"/invoices/{restaurantID}")
 
         else:
             # use for error catching
@@ -439,24 +380,7 @@ def edit_invoice(invoiceID):
             query = "UPDATE RestaurantSalesInvoices SET menu_itemID = %s, quantity_sold = %s, date_sold = %s, restaurantID = %s WHERE invoiceID = %s;"
             db.execute_query(db_connection=db_connection, query=query, query_params=(item_id, quantity_sold, date_sold, restaurant_id, invoiceID))
             
-            invoice_query = """SELECT RestaurantSalesInvoices.invoiceID, RestaurantSalesInvoices.restaurantID, Restaurants.name AS Restaurant,
-            MenuItems.name AS Item, RestaurantSalesInvoices.quantity_sold AS Quantity, RestaurantSalesInvoices.date_sold AS DateSold,
-            RestaurantSalesInvoices.quantity_sold * MenuItems.unit_price AS SaleTotal
-            FROM RestaurantSalesInvoices 
-            JOIN Restaurants ON RestaurantSalesInvoices.restaurantID = Restaurants.restaurantID
-            JOIN MenuItems ON RestaurantSalesInvoices.menu_itemID = MenuItems.menu_itemID
-            WHERE RestaurantSalesInvoices.restaurantID = %s;""" % (restaurant_id)
-            matching_invoices = db.execute_query(db_connection=db_connection, query=invoice_query)
-            all_invoices = matching_invoices.fetchall()
-            
-            name_query = "SELECT * FROM Restaurants WHERE restaurantID = %s;" % (restaurant_id)
-            matching_restaurant = db.execute_query(db_connection=db_connection, query=name_query)
-            restaurant_name = matching_restaurant.fetchall()
-
-            menu_query = "SELECT * FROM MenuItems WHERE MenuItems.restaurantID = %s;" % (restaurant_id) 
-            menu_items = db.execute_query(db_connection=db_connection, query=menu_query)
-            selected_menus = menu_items.fetchall()
-            return render_template("restaurant_invoices.j2", invoices=all_invoices, restaurant_name=restaurant_name, menu=selected_menus)
+            return redirect(f"/invoices/{restaurant_id}")
 
     # if user decides to edit the information of an invoice within selected restaurant's list of invoices    
     if request.method == "GET":

@@ -163,3 +163,7 @@ button {
 #add-first-item{
     display: none;
 }
+
+#add-first-invoice{
+    display:none;
+}
