@@ -167,3 +167,8 @@ button {
 #add-first-invoice{
     display:none;
 }
+
+
+#order-value{
+    background-color: aliceblue;
+}

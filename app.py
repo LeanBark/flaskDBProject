@@ -16,7 +16,7 @@ app = Flask(__name__)
 app.static_folder = 'static'
 app.secret_key = "add_secret_key_here"
 #TODO: Modularize redundant query code blocks
-#TODO: Implement Pandas functionality to generate mock reports 
+#TODO: Fix Mock data sorting using Pandas instead of SQL queries
 #TODO: Add comments for functions and parameters with type hinting
 #TODO: Additional error-catching for queries and posts
 
@@ -107,7 +107,8 @@ def display_all_items():
 
 @app.route("/restaurant-menu/<int:restaurantID>", methods=["GET", "POST"])
 def display_menu_items(restaurantID):
-    
+    order_selection = {"Calories": "MenuItems.calories", "Unit Price": "MenuItems.unit_price",
+                    "Menu Item ID": "MenuItems.menu_itemID"}
     if request.method == "POST":        
         # if user requests access to a specific restaurant's menu in database
         if request.form.get("View Restaurant Menu"):
@@ -128,10 +129,10 @@ def display_menu_items(restaurantID):
             
             # if there are no invoices associated with the selected restaurant
             if matching_items.rowcount == 0:
-                return render_template("menu_not_found.j2", selected_restaurant=restaurant_name, food_category=selected_categories)
+                return render_template("menu_not_found.j2", selected_restaurant=restaurant_name, food_category=selected_categories)    
 
             else:
-                return render_template("restaurant_menu.j2", menu_list=all_menu_items, restaurant_name=restaurant_name, food_category=selected_categories)
+                return render_template("restaurant_menu.j2", menu_list=all_menu_items, restaurant_name=restaurant_name, food_category=selected_categories, order_selection=order_selection)
         
         # if a user wants to add a new item to the selected restaurant's menu in the databse
         elif request.form.get("Add Menu Item"):
@@ -145,11 +146,12 @@ def display_menu_items(restaurantID):
 
         # if a user wishes to generate a .csv file of all listed invoice information of restaurant
         elif request.form.get("Generate Menu CSV"):
+            selected_order = request.form["menu-order-value"]
             menu_query = """SELECT MenuItems.restaurantID, MenuItems.menu_itemID, MenuItems.name AS Item, MenuItems.calories AS Calories, MenuItems.unit_price AS Price, FoodCategories.name AS Category
             FROM MenuItems JOIN Restaurants ON MenuItems.restaurantID = Restaurants.restaurantID
             LEFT JOIN FoodCategories ON MenuItems.food_categoryID = FoodCategories.food_categoryID
-            WHERE Restaurants.restaurantID = %s;""" % (restaurantID)
-            matching_items = db.execute_query(db_connection=db_connection, query=menu_query)
+            WHERE Restaurants.restaurantID = %s ORDER BY %s ASC;"""
+            matching_items = db.execute_query(db_connection=db_connection, query=menu_query, query_params=(restaurantID, selected_order))
             all_menu_items = matching_items.fetchall()
             
             name_query = "SELECT * FROM Restaurants WHERE restaurantID = %s;" % (restaurantID)
@@ -179,7 +181,7 @@ def display_menu_items(restaurantID):
         menu_query = """SELECT MenuItems.restaurantID, MenuItems.menu_itemID, MenuItems.name AS Item, MenuItems.calories AS Calories, MenuItems.unit_price AS Price, FoodCategories.name AS Category
         FROM MenuItems JOIN Restaurants ON MenuItems.restaurantID = Restaurants.restaurantID
         LEFT JOIN FoodCategories ON MenuItems.food_categoryID = FoodCategories.food_categoryID
-        WHERE Restaurants.restaurantID = %s;""" % (restaurantID)
+        WHERE Restaurants.restaurantID = %s ORDER BY MenuItems.name ASC;""" % (restaurantID)
         matching_items = db.execute_query(db_connection=db_connection, query=menu_query)
         all_menu_items = matching_items.fetchall()
         
@@ -195,7 +197,7 @@ def display_menu_items(restaurantID):
         if matching_items.rowcount == 0:
                 return render_template("menu_not_found.j2", selected_restaurant=restaurant_name, food_category=selected_categories)
         else:
-            return render_template("restaurant_menu.j2", menu_list=all_menu_items, restaurant_name=restaurant_name, food_category=selected_categories)
+            return render_template("restaurant_menu.j2", menu_list=all_menu_items, restaurant_name=restaurant_name, food_category=selected_categories, order_selection=order_selection)
 
 #-------------------------------ROUTE FOR UPDATING MENU ITEMS BY RESTAURANT------------------------------------------------
 
@@ -219,7 +221,7 @@ def edit_menu_items(menu_itemID):
         menu_query = """SELECT MenuItems.restaurantID, MenuItems.menu_itemID, MenuItems.name AS Item, MenuItems.calories AS Calories, MenuItems.unit_price AS Price, FoodCategories.name AS Category
         FROM MenuItems JOIN Restaurants ON MenuItems.restaurantID = Restaurants.restaurantID
         LEFT JOIN FoodCategories ON MenuItems.food_categoryID = FoodCategories.food_categoryID
-        WHERE MenuItems.menu_itemID = %s;""" % (menu_itemID)
+        WHERE MenuItems.menu_itemID = %s ORDER BY MenuItems.name ASC;""" % (menu_itemID)
         matching_items = db.execute_query(db_connection=db_connection, query=menu_query)
         all_menu_items = matching_items.fetchall()
         
@@ -251,7 +253,7 @@ def delete_menu_item(menu_itemID):
     menu_query = """SELECT MenuItems.restaurantID, MenuItems.menu_itemID, MenuItems.name AS Item, MenuItems.calories AS Calories, MenuItems.unit_price AS Price, FoodCategories.name AS Category
     FROM MenuItems JOIN Restaurants ON MenuItems.restaurantID = Restaurants.restaurantID
     LEFT JOIN FoodCategories ON MenuItems.food_categoryID = FoodCategories.food_categoryID
-    WHERE Restaurants.restaurantID = %s;""" % (restaurant_id)
+    WHERE Restaurants.restaurantID = %s ORDER BY MenuItems.name ASC;""" % (restaurant_id)
     matching_items = db.execute_query(db_connection=db_connection, query=menu_query)
     all_menu_items = matching_items.fetchall()
     
@@ -285,6 +287,8 @@ def display_all_invoices():
 
 @app.route("/invoices/<int:restaurantID>", methods=["GET", "POST"])
 def display_invoices(restaurantID):
+    order_choices = {"Date Sold": "RestaurantSalesInvoices.date_sold", "Sale Total": "RestaurantSalesInvoices.quantity_sold * MenuItems.unit_price",
+                    "Invoice ID": "RestaurantSalesInvoices.invoiceID"}
     # if user wishes to view the table containing the current invoices of the selected restaurant
     if request.method == "POST":
         if request.form.get("View Restaurant Invoices"):
@@ -294,7 +298,7 @@ def display_invoices(restaurantID):
             FROM RestaurantSalesInvoices
             JOIN Restaurants ON RestaurantSalesInvoices.restaurantID = Restaurants.restaurantID
             JOIN MenuItems ON RestaurantSalesInvoices.menu_itemID = MenuItems.menu_itemID
-            WHERE RestaurantSalesInvoices.restaurantID = %s;""" % (restaurantID)
+            WHERE RestaurantSalesInvoices.restaurantID = %s ORDER BY RestaurantSalesInvoices.date_sold ASC;""" % (restaurantID)
             invoice_list = db.execute_query(db_connection=db_connection, query=invoices_query)
             invoices = invoice_list.fetchall()
             
@@ -307,10 +311,10 @@ def display_invoices(restaurantID):
                 restaurant_query = "SELECT * FROM Restaurants WHERE restaurantID = %s" % (restaurantID)
                 restaurant_result = db.execute_query(db_connection=db_connection, query=restaurant_query)
                 selected_restaurant = restaurant_result.fetchall()
-                return render_template("invoices_not_found.j2", selected_restaurant=selected_restaurant, menu=menu_items)
+                return render_template("invoices_not_found.j2", selected_restaurant=selected_restaurant, menu=menu_items, order_choices=order_choices)
             
             else:
-                return render_template("restaurant_invoices.j2", invoices=invoices, menu=menu_items)
+                return render_template("restaurant_invoices.j2", invoices=invoices, menu=menu_items, order_choices=order_choices)
         
         # if user decides to add a new invoice to the table of invoices for the selected restaurant
         elif request.form.get("Add Invoice"):
@@ -322,14 +326,15 @@ def display_invoices(restaurantID):
             return redirect(f"/invoices/{restaurantID}")
 
         elif request.form.get("Generate CSV Report"):
+            selected_order = request.form["order-value"]
             invoices_query = """SELECT RestaurantSalesInvoices.invoiceID, RestaurantSalesInvoices.restaurantID, Restaurants.name AS Restaurant,
             MenuItems.name AS Item, RestaurantSalesInvoices.quantity_sold AS Quantity, RestaurantSalesInvoices.date_sold AS DateSold,
             RestaurantSalesInvoices.quantity_sold * MenuItems.unit_price AS SaleTotal 
             FROM RestaurantSalesInvoices
             JOIN Restaurants ON RestaurantSalesInvoices.restaurantID = Restaurants.restaurantID
             JOIN MenuItems ON RestaurantSalesInvoices.menu_itemID = MenuItems.menu_itemID
-            WHERE RestaurantSalesInvoices.restaurantID = %s;""" % (restaurantID)
-            invoice_list = db.execute_query(db_connection=db_connection, query=invoices_query)
+            WHERE RestaurantSalesInvoices.restaurantID = %s ORDER BY %s ASC;"""
+            invoice_list = db.execute_query(db_connection=db_connection, query=invoices_query, query_params=(restaurantID, selected_order))
             invoices = invoice_list.fetchall()
             report_information = json.dumps(invoices)
             df = pd.read_json(StringIO(report_information))
@@ -355,7 +360,7 @@ def display_invoices(restaurantID):
         FROM RestaurantSalesInvoices 
         JOIN Restaurants ON RestaurantSalesInvoices.restaurantID = Restaurants.restaurantID
         JOIN MenuItems ON RestaurantSalesInvoices.menu_itemID = MenuItems.menu_itemID
-        WHERE RestaurantSalesInvoices.restaurantID = %s;""" % (restaurantID)
+        WHERE RestaurantSalesInvoices.restaurantID = %s ORDER BY RestaurantSalesInvoices.date_sold ASC;""" % (restaurantID)
         invoice_list = db.execute_query(db_connection=db_connection, query=invoices_query)
         invoices = invoice_list.fetchall()
         
@@ -363,7 +368,7 @@ def display_invoices(restaurantID):
         menu_list = db.execute_query(db_connection=db_connection, query=menu_item_query)
         menu_items = menu_list.fetchall()
         
-        return render_template("restaurant_invoices.j2", invoices=invoices, menu=menu_items)
+        return render_template("restaurant_invoices.j2", invoices=invoices, menu=menu_items, order_choices=order_choices)
 
 #-------------------------------ROUTE FOR UPDATING INVOICES BY RESTAURANT--------------------------------------------------
     

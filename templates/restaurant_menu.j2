@@ -34,14 +34,23 @@
             <div id="flash-menu-message" class="flash {{category}}">{{message}}</div>
         {% endfor %}
     </div>
-    <div class="add-item-btn">
+
+    <div id="add-item-btn">
         <div class="btn-group">
-            <input type="button" value="Add New Menu Item" id="add-item-btn" onClick="addMenuItem()">
+            <p><input type="button" value="Add New Menu Item" id="add-item-btn" onClick="addMenuItem()"></p>
         </div>
     
         <div class="container-fluid">
-            <form id="generate-menu-form" action="/restaurant-menu/{{menu_list[0].restaurantID}}" method="post">               
-                <button class="btn btn-primary" type="submit" value="Generate Menu CSV" id="Generate Menu CSV" name="Generate Menu CSV">Generate Menu CSV</button>
+            <label for="generate-menu-form">Generate A CSV Ordered By Selected Value</label>
+            <form id="generate-menu-form" action="/restaurant-menu/{{menu_list[0].restaurantID}}" method="post">   
+                <div class="input-group w-50 mx-auto"> 
+                    <select class="form-select" name="menu-order-value" id="menu-order-value" required>
+                        {% for key,value in order_selection.items() %}
+                            <option value="{{value}}">Order By {{key}}</option>
+                        {% endfor %}
+                    </select>            
+                    <button class="btn btn-primary" type="submit" value="Generate Menu CSV" id="Generate Menu CSV" name="Generate Menu CSV">Generate Menu CSV</button>
+                </div>
             </form>
         </div>
     </div>
