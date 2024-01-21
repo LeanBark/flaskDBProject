@@ -48,10 +48,10 @@ This project was designed for locally hosting the database and UI instead of hos
 Example for .env format:
 
 ````
-```"database_nameHOST" = your_hostname```
-```"database_nameUSER" = your_username```
-```"database_namePW" = your_database_password```
-```"database_name" = database_name```
+"database_nameHOST" = your_hostname
+"database_nameUSER" = your_username
+"database_namePW" = your_database_password
+"database_name" = database_name
 ````
 
 Ensure the .env definition names match those requested within the db_connector.py
