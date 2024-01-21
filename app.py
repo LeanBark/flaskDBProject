@@ -1,22 +1,19 @@
 from flask import Flask, render_template, json, redirect, flash, url_for
 from flask import request
-from datetime import date
 from io import StringIO
 import database.db_connector as db
 import pandas as pd
-import os, openpyxl
+import os, secrets
 
-
-today = date.today()
 
 
 db_connection = db.connect_to_database()
 app = Flask(__name__)
 
 app.static_folder = 'static'
-app.secret_key = "add_secret_key_here"
+app.secret_key = secrets.token_urlsafe(32) # randomly generates a secret key for flask session
+
 #TODO: Modularize redundant query code blocks
-#TODO: Fix Mock data sorting using Pandas instead of SQL queries
 #TODO: Add comments for functions and parameters with type hinting
 #TODO: Additional error-catching for queries and posts
 
@@ -142,7 +139,7 @@ def display_menu_items(restaurantID):
             db.execute_query(db_connection=db_connection, query=query, query_params=(item_name, calories, item_cost, category, restaurantID))
             return redirect(f"/restaurant-menu/{restaurantID}")
 
-        # if a user wishes to generate a .csv file of all listed invoice information of restaurant
+        # if user wishes to create a localized CSV file of the selected restaurant's entire existing menu information
         elif request.form.get("Generate Menu CSV"):
             
             menu_query = """SELECT MenuItems.restaurantID, MenuItems.menu_itemID, MenuItems.name AS Item, MenuItems.calories AS Calories, MenuItems.unit_price AS Price, FoodCategories.name AS Category
@@ -304,6 +301,7 @@ def display_invoices(restaurantID):
             menu_list = db.execute_query(db_connection=db_connection, query=menu_item_query)
             menu_items = menu_list.fetchall()
 
+            #if no invoices for selected restaurant
             if invoice_list.rowcount == 0:
                 restaurant_query = "SELECT * FROM Restaurants WHERE restaurantID = %s" % (restaurantID)
                 restaurant_result = db.execute_query(db_connection=db_connection, query=restaurant_query)
@@ -322,6 +320,7 @@ def display_invoices(restaurantID):
             db.execute_query(db_connection=db_connection, query=insert_query, query_params=(menu_item_ID, quantity_sold, date_sold, restaurantID))
             return redirect(f"/invoices/{restaurantID}")
 
+        # if user wishes to create a localized CSV file of the selected restaurant's entire existing invoice information
         elif request.form.get("Generate CSV Report"):
 
             invoices_query = """SELECT RestaurantSalesInvoices.invoiceID, RestaurantSalesInvoices.restaurantID, Restaurants.name AS Restaurant,
