@@ -160,6 +160,7 @@ def display_menu_items(restaurantID):
             menu_information = json.dumps(all_menu_items)
             df = pd.read_json(StringIO(menu_information))
             
+            # places CSV either within local machine's Downloads folder or within the cloned repository if route is invalid
             try:
                 df.to_csv(f"{os.environ.get('HOMEDRIVE')}{os.environ.get('HOMEPATH')}\Downloads\{restaurant_name[0]['name']}_menu.csv")
                 flash("Menu Successfully Downloaded to local 'Downloads' Directory!", category="menu-path-success")
@@ -335,6 +336,7 @@ def display_invoices(restaurantID):
             report_information = json.dumps(invoices)
             df = pd.read_json(StringIO(report_information))
 
+            # places CSV either within local machine's Downloads folder or within the cloned repository if route is invalid
             try:
                 df.to_csv(f"{os.environ.get('HOMEDRIVE')}{os.environ.get('HOMEPATH')}\Downloads\{invoices[0]['Restaurant']}_invoices.csv")
                 flash("Successfully Downloaded to local 'Downloads' Directory!", category="path-success")

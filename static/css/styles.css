@@ -57,13 +57,10 @@ th {
  /* form styling */
 
 form {
-    /* vertical-align: middle; */
     color: rgb(28, 32, 28);
     padding-top: 5px;
     padding-bottom: 5px;
     position: relative;
-    /* margin-left: auto;
-    margin-right: auto; */
     size: 30px;
 }
 
@@ -72,7 +69,6 @@ form {
 button:hover{
     background-color: rgb(247, 247, 247);
 }
-
 
 input, select {
     padding-bottom: 4px;
@@ -119,6 +115,7 @@ button {
     margin-right: auto;
 }
 
+/* styling for flash messages */
 .flash {
     padding: 20px;
     margin: 20px;
@@ -143,6 +140,7 @@ button {
     background-color:aquamarine;
     color:black;
 }
+
 /* Ensures transitions between document display formats of restaurant_invoices.j2 and restaurant_menu.j2 are smooth */
 #add-menu-item{
     display: none;   
@@ -167,7 +165,6 @@ button {
 #add-first-invoice{
     display:none;
 }
-
 
 #order-value{
     background-color: aliceblue;
