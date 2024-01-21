@@ -27,7 +27,7 @@ The following additional modules are required to be locally installed in order t
 
 BootStrap and jQuery are accessed through CDN deliverables placed directly within the jinja templates
 
-# Locally Accessing the app using a local machine as hosting server
+# Locally Accessing the App using a Local Machine as Hosting Server
 
 Download the MariaDB server from https://mariadb.org/download/ to local machine
  - NOTE: During installation process, make sure to set and record password to access local MariaDB and its location
@@ -47,10 +47,12 @@ This project was designed for locally hosting the database and UI instead of hos
 
 Example for .env format:
 
+````
 ```"database_nameHOST" = your_hostname```
 ```"database_nameUSER" = your_username```
 ```"database_namePW" = your_database_password```
 ```"database_name" = database_name```
+````
 
 Ensure the .env definition names match those requested within the db_connector.py
 
@@ -66,7 +68,7 @@ In IDE terminal:
 While the local database can still be implemented following the instructions above, the hostname value in the .env file will need to be altered to reflect the remote server you wish to access.
 
 This may also affect the website address that will display the UI
- - This most likely will be "http://<hostserver'sIPAddress>:<PORT>/" 
+ - This most likely will be "http://'hostserver_IP_Address':PORT/" 
 
 
 # Populating Database with Additional Sample Data
