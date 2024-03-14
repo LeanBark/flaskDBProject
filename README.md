@@ -76,6 +76,13 @@ The repository files include the "sample_data.json" and "data_collection.py" fil
 
 To populate the database with the additional information, execute the "data_collection.py" file which will organize and populate the database with the information stored in the "sample_data.json" file
 
+# Demonstration Video
+
+View the embedded video below to view a demonstration of the current version of the project
+This version is up-to-date as of : March 14, 2024
+
+"https://cdnapisec.kaltura.com/p/391241/sp/39124100/embedIframeJs/uiconf_id/22119142/partner_id/391241?iframeembed=true&playerId=kaltura_player&entry_id=1_5q7ukdl4&flashvars[localizationCode]=en&amp;flashvars[sideBarContainer.plugin]=true&amp;flashvars[sideBarContainer.position]=left&amp;flashvars[sideBarContainer.clickToClose]=true&amp;flashvars[chapters.plugin]=true&amp;flashvars[chapters.layout]=vertical&amp;flashvars[chapters.thumbnailRotator]=false&amp;flashvars[streamSelector.plugin]=true&amp;flashvars[EmbedPlayer.SpinnerTarget]=videoHolder&amp;flashvars[dualScreen.plugin]=true&amp;flashvars[hotspots.plugin]=1&amp;flashvars[Kaltura.addCrossoriginToIframe]=true&amp;&wid=1_ct58u147"
+
 # Citations
 
 Citation for the UI templating design, app.py routing structure, and MariaDB database connection procedures:

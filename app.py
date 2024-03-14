@@ -46,7 +46,7 @@ def restaurants():
     # if user wishes to view the information of the selected restaurant
     if request.method == "GET":
         query = """SELECT Restaurants.restaurantID AS Id, Restaurants.name AS Name, Restaurants.address AS Address, FoodCategories.name AS Category 
-        FROM Restaurants INNER JOIN FoodCategories ON Restaurants.food_categoryID = FoodCategories.food_categoryID ORDER BY Restaurants.restaurantID ASC;"""
+        FROM Restaurants INNER JOIN FoodCategories ON Restaurants.food_categoryID = FoodCategories.food_categoryID ORDER BY Restaurants.name ASC;"""
         cursor = db.execute_query(db_connection=db_connection, query=query)
         results = cursor.fetchall()
         query1 = "SELECT * FROM FoodCategories ORDER BY food_categoryID ASC;"
