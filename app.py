@@ -416,6 +416,6 @@ def edit_invoice(invoiceID):
 #--------------------------------------------END OF ROUTES----------------------------------------------------------------------------
 # Listener
 if __name__ == "__main__":
-    port = int(os.environ.get('PORT', 8560))
+    port = int(os.environ.get('PORT', 8000))
     app.run(port=port, debug=True)
 

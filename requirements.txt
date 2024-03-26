@@ -1,0 +1,5 @@
+pip>=24
+pandas>=2.2
+flask-mysqldb>=2.0
+python-dotenv>=1.0.0
+click>=7.1.2
