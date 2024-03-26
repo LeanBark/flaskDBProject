@@ -14,7 +14,7 @@ This implementation was designed for use as a back-end UI that allows for databa
 
 # Environment Setup
 
-1. Creating a local virtual environment:
+## 1. Creating a local virtual environment: ##
 
 It is strongly advised to create a virtual environment within which to import the repository.
 
@@ -32,18 +32,18 @@ source .venv/bin/activate
 
 NOTE: If the set of commands listed do not work, instructions to ensure the clone operates within a venv file can be found here: https://flask.palletsprojects.com/en/3.0.x/installation/
 
-2. Create a git clone within your activated virtual environment:
+## 2. Create a git clone within your activated virtual environment: ##
  
  ```git clone <copied https/ssh url>```
 
 
-3. Establish a launch/run configuration for Flask application
+## 3. Establish a launch/run configuration for Flask application ##
 
 The launch.json configuration files are located within the .vscode folder. While specific to VS Code, the information within in the launch.json file can be adapted to run within other editors. 
  - "app.py" is the executable file for initialization of Flask server (ensure FLASK_APP is configured to run "app.py")
 
 
-4. Install dependencies within virtual environment
+## 4. Install dependencies within virtual environment ##
 Ensure that python3 is installed for use in local environment
 
 The following additional modules are required to initialize the flask application in its intended state:
@@ -71,7 +71,7 @@ python3 setup.py
 
 NOTE: It is advised that the flask server instance is executed within a directory existing on your local machine and NOT from within a Codespace environment. The default socket connection settings for the locally-installed database may result in the local database being inaccessible to a flask server instance running within a Codespace environment.
 
-1. Install and configure a local MariaDB server on your local machine 
+## 1. Install and configure a local MariaDB server on your local machine ## 
 
 Download the MariaDB server from https://mariadb.org/download/ to local machine
  - NOTE: During installation process, make sure to set and record password to access local MariaDB and its location
@@ -87,7 +87,7 @@ In MariaDB folder:
 
  - ```source 'your_local_file_path';``` to fill the new database with the DDL's tables and data
 
-2. Create a .env file to store database access credentials
+## 2. Create a .env file to store database access credentials ##
 
 This project was designed for locally hosting the database and UI instead of hosting on a remote server. However, connection to either type of server will require adding a .env file that defines the user-specific values for authorized access to the database:
 
@@ -102,7 +102,7 @@ Example for .env file format:
 
 Ensure the .env definition names match those requested within the db_connector.py
 
-3. Start the Flask Application Server
+## 3. Start the Flask Application Server ##
 
 Change to "flaskDBProject" directory by entering:
 ```cd ./flaskDBProject"```
