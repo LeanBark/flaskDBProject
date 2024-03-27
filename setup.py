@@ -12,7 +12,7 @@ def install_dependencies():
     """
     Checks native operating system and passes appropriate commands to install required modules
     """
-    is_windows = False
+    
     system_type = platform.system()
 
     # determine operating system for appropriate commands
@@ -22,7 +22,6 @@ def install_dependencies():
     else:
         check_for_pip = f"py -m pip --version"
         install_pip = f"py -m ensurepip --default-pip"
-        is_windows = True
 
     print("Checking for pip..")
 
@@ -41,13 +40,9 @@ def install_dependencies():
     # if pip installer is confirmed, install necessary modules for application execution from requirements.txt
     with open("requirements.txt") as reqs:
         install_requires = reqs.read().splitlines()
-        if is_windows:
-            key_command = "py"
-        else:
-            key_command = "python3"
         
         for req in install_requires:
-            install_cmd = f"{key_command} -m pip install {str(req)}"
+            install_cmd = f"pip install {str(req)}"
             pkg = str(req).split(">=")
             print(f"Installing/Updating {pkg[0]}...")
             try:
