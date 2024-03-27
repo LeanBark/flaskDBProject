@@ -9,7 +9,8 @@ The locally-implemented mariaDB database stores information in terms of:
 - Sales invoices for each restaurant in terms of each item from their menu that was sold
 
 This implementation was designed for use as a back-end UI that allows for database access/maintenance. This can be utilized as a working template for users who are relatively new to how the Flask framework can be utilized to pass SQL queries and retrieve/modify/display database records stored in a relational database, such as a mariaDB server. Additional features provided allow the user to:
- - Supplement the database with additional records by executing the "data_collection.py" file
+ - Automatically install all required modules not provided in the Python standard library by executing the ```setup.py``` file
+ - Supplement the database with additional records by executing the ```data_collection.py``` file
  - Generate a CSV file of any specific restaurant's menu information or existing invoices that can be stored locally or within the cloned directory
 
 # Environment Setup
@@ -40,7 +41,7 @@ NOTE: If the set of commands listed do not work, instructions to ensure the clon
 ## 3. Establish a launch/run configuration for Flask application ##
 
 The launch.json configuration files are located within the .vscode folder. While specific to VS Code, the information within in the launch.json file can be adapted to run within other editors. 
- - "app.py" is the executable file for initialization of Flask server (ensure FLASK_APP is configured to run "app.py")
+ - ```app.py``` is the executable file for initialization of Flask server (ensure FLASK_APP is configured to run "app.py")
 
 
 ## 4. Install dependencies within virtual environment ##
@@ -52,7 +53,7 @@ The following additional modules are required to initialize the flask applicatio
  - ```python-dotenv``` - https://pypi.org/project/python-dotenv/
  - ```click``` - https://pypi.org/project/python-dotenv/
 
-To quickly install these within the virtual environment without installing them locally, run "setup.py":
+To quickly install these within the virtual environment without installing them locally, run ```setup.py```:
 
 Windows:
 ````
@@ -100,14 +101,14 @@ Example for .env file format:
 "database_name" = database_name
 ````
 
-Ensure the .env definition names match those requested within the db_connector.py
+Ensure the ```.env``` definition names match those requested within ```db_connector.py```
 
 ## 3. Start the Flask Application Server ##
 
-Change to "flaskDBProject" directory by entering:
+Change to the flaskDBProject directory by entering:
 ```cd ./flaskDBProject```
 
-Launch Flask instance using "app.py" to start Flask server (using the configuration settings enclosed in the launch.json file) 
+Launch Flask instance using ```app.py``` to start Flask server (using the configuration settings enclosed in the launch.json file) 
 - You should now be able to access a locally-hosted version of the app at the address "http://localhost:PORT"
 - PORT value should be defined in app.py
 
@@ -122,8 +123,10 @@ This may also affect the website address that will display the UI
 # Populating Database with Additional Sample Data
 
 The repository files also include: 
-```sample_data.json```
-```data_collection.py``
+````
+sample_data.json
+data_collection.py
+````
 
 Executing the ```data_collection.py``` file will populate the local database with additional menu items stored within ```sample_data.json``` to allow for increased flexibility in testing/modification.
 
