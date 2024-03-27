@@ -53,7 +53,7 @@ The following additional modules are required to initialize the flask applicatio
  - ```python-dotenv``` - https://pypi.org/project/python-dotenv/
  - ```click``` - https://pypi.org/project/python-dotenv/
 
-To quickly install these within the virtual environment without installing them locally, run ```setup.py```:
+To quickly install/update all required versions of the necessary modules, run ```setup.py```:
 
 Windows:
 ````
