@@ -9,25 +9,70 @@ The locally-implemented mariaDB database stores information in terms of:
 - Sales invoices for each restaurant in terms of each item from their menu that was sold
 
 This implementation was designed for use as a back-end UI that allows for database access/maintenance. This can be utilized as a working template for users who are relatively new to how the Flask framework can be utilized to pass SQL queries and retrieve/modify/display database records stored in a relational database, such as a mariaDB server. Additional features provided allow the user to:
- - Supplement the database with additional records by executing the "data_collection.py" file
+ - Automatically install all required modules not provided in the Python standard library by executing the ```setup.py``` file
+ - Supplement the database with additional records by executing the ```data_collection.py``` file
  - Generate a CSV file of any specific restaurant's menu information or existing invoices that can be stored locally or within the cloned directory
 
 # Environment Setup
 
-The configuration files are omitted from the repository files as they are specific to VSCode's launch configuration. Instructions to ensure the git clone operates within a venv file can be found here: https://flask.palletsprojects.com/en/3.0.x/installation/
+## 1. Creating a local virtual environment: ##
 
-After creating a local virtual environment:
- - create a git clone within this environment
- - "app.py" is the executable file for initialization of Flask server(if not using CLI commands, ensure default run configuration is set to "app.py")
+It is strongly advised to create a virtual environment within which to import the repository.
 
-The following additional modules are required to be locally installed in order to fully utilize all files:
+For Windows systems, enter the following commands:
+````
+py -m venv .venv
+source .venv/Scripts/activate
+```` 
+
+For Linux/macOS systems, enter the following commands:
+````
+python3 -m venv .venv
+source .venv/bin/activate
+````
+
+NOTE: If the set of commands listed do not work, instructions to ensure the clone operates within a venv file can be found here: https://flask.palletsprojects.com/en/3.0.x/installation/
+
+## 2. Create a git clone within your activated virtual environment: ##
+ 
+ ```git clone <copied https/ssh url>```
+
+
+## 3. Establish a launch/run configuration for Flask application ##
+
+The launch.json configuration files are located within the .vscode folder. While specific to VS Code, the information within in the launch.json file can be adapted to run within other editors. 
+ - ```app.py``` is the executable file for initialization of Flask server (ensure FLASK_APP is configured to run "app.py")
+
+
+## 4. Install dependencies within virtual environment ##
+Ensure that python3 is installed for use in local environment
+
+The following additional modules are required to initialize the flask application in its intended state:
  - ```pandas``` - https://pandas.pydata.org/docs/getting_started/index.html
- - ```flask```  - https://flask.palletsprojects.com/en/2.3.x/
- - ```MySQLdb``` - https://mysqlclient.readthedocs.io/user_guide.html
+ - ```flask-mysqldb```  - https://pypi.org/project/Flask-MySQLdb/
+ - ```python-dotenv``` - https://pypi.org/project/python-dotenv/
+ - ```click``` - https://pypi.org/project/python-dotenv/
 
-BootStrap and jQuery are accessed through CDN deliverables placed directly within the jinja templates
+To quickly install these within the virtual environment without installing them locally, run ```setup.py```:
+
+Windows:
+````
+cd ./flaskDBProject
+py setup.py
+````
+
+macOS/Linux:
+````
+cd ./flaskDBProject
+python3 setup.py
+````
+
 
 # Locally Accessing the App using a Local Machine as Hosting Server
+
+NOTE: It is advised that the flask server instance is executed within a directory existing on your local machine and NOT from within a Codespace environment. The default socket connection settings for the locally-installed database may result in the local database being inaccessible to a flask server instance running within a Codespace environment.
+
+## 1. Install and configure a local MariaDB server on your local machine ## 
 
 Download the MariaDB server from https://mariadb.org/download/ to local machine
  - NOTE: During installation process, make sure to set and record password to access local MariaDB and its location
@@ -43,9 +88,11 @@ In MariaDB folder:
 
  - ```source 'your_local_file_path';``` to fill the new database with the DDL's tables and data
 
-This project was designed for locally hosting the database and UI instead of hosting on a remote server. Connection to either type of server will require adding a .env file that defines the user-specific values for authorized access to the database:
+## 2. Create a .env file to store database access credentials ##
 
-Example for .env format:
+This project was designed for locally hosting the database and UI instead of hosting on a remote server. However, connection to either type of server will require adding a .env file that defines the user-specific values for authorized access to the database:
+
+Example for .env file format:
 
 ````
 "database_nameHOST" = your_hostname
@@ -54,12 +101,14 @@ Example for .env format:
 "database_name" = database_name
 ````
 
-Ensure the .env definition names match those requested within the db_connector.py
+Ensure the ```.env``` definition names match those requested within ```db_connector.py```
 
-In IDE terminal:
-- Change to "flaskDBProject" directory:
-```cd ./flaskDBProject"```
-- Execute "app.py" to start Flask server
+## 3. Start the Flask Application Server ##
+
+Change to the flaskDBProject directory by entering:
+```cd ./flaskDBProject```
+
+Launch Flask instance using ```app.py``` to start Flask server (using the configuration settings enclosed in the launch.json file) 
 - You should now be able to access a locally-hosted version of the app at the address "http://localhost:PORT"
 - PORT value should be defined in app.py
 
@@ -72,9 +121,15 @@ This may also affect the website address that will display the UI
 
 
 # Populating Database with Additional Sample Data
-The repository files include the "sample_data.json" and "data_collection.py" files, which can be utilized for populating the database with addtional menu items to allow for increased flexibility in testing and modifying database values.
 
-To populate the database with the additional information, execute the "data_collection.py" file which will organize and populate the database with the information stored in the "sample_data.json" file
+The repository files also include: 
+````
+sample_data.json
+data_collection.py
+````
+
+Executing the ```data_collection.py``` file will populate the local database with additional menu items stored within ```sample_data.json``` to allow for increased flexibility in testing/modification.
+
 
 # Demonstration Video
 
