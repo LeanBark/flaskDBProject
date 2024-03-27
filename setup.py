@@ -1,13 +1,21 @@
 import subprocess, shlex, platform
 
 def install_reqs(command):
+    """
+    Runs each command passed to function as if manually entered onto CLI
+    """
     cmd = shlex.split(command)
     output = subprocess.check_output(cmd)
     return output
 
 def install_dependencies():
+    """
+    Checks native operating system and passes appropriate commands to install required modules
+    """
     is_windows = False
     system_type = platform.system()
+
+    # determine operating system for appropriate commands
     if system_type != "Windows":
         check_for_pip = f"python3 -m pip --version"
         install_pip = f"python3 -m ensurepip --default-pip"
@@ -17,6 +25,8 @@ def install_dependencies():
         is_windows = True
 
     print("Checking for pip..")
+
+    # determine whether pip installer is present
     try:
         install_reqs(check_for_pip)
     except:
@@ -28,17 +38,23 @@ def install_dependencies():
             print("Unable to install pip. Please visit to https://packaging.python.org/en/latest/tutorials/installing-packages/ to manually install pip")
             return
     
+    # if pip installer is confirmed, install necessary modules for application execution from requirements.txt
     with open("requirements.txt") as reqs:
         install_requires = reqs.read().splitlines()
         if is_windows:
             key_command = "py"
         else:
             key_command = "python3"
+        
         for req in install_requires:
             install_cmd = f"{key_command} -m pip install {str(req)}"
             pkg = str(req).split(">=")
             print(f"Installing/Updating {pkg[0]}...")
-            install_reqs(install_cmd)
+            try:
+                install_reqs(install_cmd)
+            except:
+                print(f"Error: There was a problem installing the {pkg[0]} module.")
+                print("Please refer to the individual links in the README to manually install this module before proceeding further/")
 
-
-install_dependencies()
+if __name__ == "__main__":
+    install_dependencies()

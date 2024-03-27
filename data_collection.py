@@ -1,11 +1,13 @@
 import json
-from datetime import datetime
 import database.db_connector as db
 
 db_connection = db.connect_to_database()
 
 # function can be called in tandem with json file to add increased sample data to database
 def collect_data():
+    """
+    Adds new menu item information for both new and pre-existing restaurants within the database
+    """
     with open("sample_data.json", "r") as in_file:
         restaurants_data = json.load(in_file)
 
@@ -74,17 +76,9 @@ def collect_data():
             db.execute_query(db_connection=db_connection, query=insert_data_query, query_params=(item_name, calorie_amt, item_price, category_id, id_value))
 
 if __name__ == "__main__":
-    # testing and timing
-    now_time = datetime.now()
-    start_time = datetime(now_time.year, now_time.month , now_time.day)
     
     try:
         collect_data()
     except:
         print("there was an error in the input data format\n")
         print("Format as {'<restaurant_name>': {'menu_item':[<name1>,..], 'calories': [<number1>,..]}, 'food_category':[<category1>,..]},{..")
-
-    finish_time = datetime.now()
-    duration = finish_time - now_time
-    seconds, microseconds = divmod(duration.microseconds, 1000000)
-    print(f'The function took {seconds} seconds and {microseconds} microseconds to run.')
