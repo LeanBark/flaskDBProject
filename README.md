@@ -105,7 +105,7 @@ Ensure the .env definition names match those requested within the db_connector.p
 ## 3. Start the Flask Application Server ##
 
 Change to "flaskDBProject" directory by entering:
-```cd ./flaskDBProject"```
+```cd ./flaskDBProject```
 
 Launch Flask instance using "app.py" to start Flask server (using the configuration settings enclosed in the launch.json file) 
 - You should now be able to access a locally-hosted version of the app at the address "http://localhost:PORT"
@@ -121,9 +121,12 @@ This may also affect the website address that will display the UI
 
 # Populating Database with Additional Sample Data
 
-The repository files include the "sample_data.json" and "data_collection.py" files, which can be utilized for populating the database with addtional menu items to allow for increased flexibility in testing and modifying database values.
+The repository files also include: 
+```sample_data.json```
+```data_collection.py``
 
-To populate the database with the additional information, execute the "data_collection.py" file which will organize and populate the database with the information stored in the "sample_data.json" file
+Executing the ```data_collection.py``` file will populate the local database with additional menu items stored within ```sample_data.json``` to allow for increased flexibility in testing/modification.
+
 
 # Demonstration Video
 
